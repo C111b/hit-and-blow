@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 //DONE - set number of slots
 //DONE - get a random sequence of colors
 
-// - Figure out how to render historical attempts to view on the screen
-// - submit button => takes user sequence outputs resulting hits/blows, "saves" all results onto the screen ... perhaps a separate usestate for results in json
-// - sets turns (need for rendering hits/blows for each turn)
+//DONE - Figure out how to render historical attempts to view on the screen
+//DONE - submit button => takes user sequence outputs resulting hits/blows, "saves" all results onto the screen ... perhaps a separate usestate for results in json
+//DONE - sets turns (need for rendering hits/blows for each turn)
 // - allows user inputted area to pivot after the historical portion
 // - maybe make a turn count, to show you won in x turns
 
@@ -142,26 +142,23 @@ const resultsToArray = (hits, blows, slots) => {
   let count = 0;
 
   if (hits > 0) {
-    for (let i=0;i<hits;i++) {
+    for (let i = 0; i < hits; i++) {
       temp.push("hit");
       count++;
     }
   }
   if (blows > 0) {
-    for (let i=0;i<blows;i++) {
+    for (let i = 0; i < blows; i++) {
       temp.push("blow");
       count++;
     }
   }
 
-  for (let i =0; i< (slots-count); i++) {
-    temp.push("none")
+  for (let i = 0; i < slots - count; i++) {
+    temp.push("none");
   }
   return temp;
 };
-
-
-
 
 //function that filters duplicates in sequence (extend for later)
 
@@ -181,39 +178,46 @@ const Game = () => {
 
   // const [history, setHistory] = useState([]);
   // const [active, setActive] = useState(false)                //state for if an item is present in user seq
+
+  //create an array for hits and blows that can be indexed by turn
   let hits = scoreChecker(seq, userseq)[0];
   let blows = scoreChecker(seq, userseq)[1];
 
   //testing
   //Errors?
 
-
   //updates user input history
   const updateHistory = () => {
     let temp = [...history];
-    temp.push([]);
-    temp[turn].push(userseq);
+    // temp.push([]);
+    temp.push(userseq);
     console.log("historic user inputs: ");
     console.log(temp); //*testing
-    return temp;
+    setHistory(temp);
   };
 
   //updates result history
   const updateResults = () => {
     let temp = [...results];
-    temp.push([]);
-    temp[turn].push(resultsToArray(hits, blows, slots));
+    // temp.push([]);
+    temp.push(resultsToArray(hits, blows, slots));
     console.log("historic results: ");
     console.log(temp); // *testing
-    return temp;
+    setResults(temp);
   };
+
+  useEffect(() => {
+    console.log(typeof results);
+  })
 
   // - submit button not outputting html elements
   useEffect(() => {
-    setHistory(updateHistory());
-    setResults(updateResults());
+    updateHistory();
+    updateResults();
     setTurn((turn) => turn + 1);
-  }, [submit]);
+    setUserSeq(blanks(slots));
+    // eslint-disable-next-line
+  }, [submit]); //above comment removes dependency yelling
 
   //new game reverts to initial conditions
   // changing any header inputs reverts to ICs
@@ -225,7 +229,6 @@ const Game = () => {
     setHistory([]);
     setResults([]);
   }, [newgame, colors, slots]); //changed for testing... *remember to change back to [newgame,colors,slots] when testing is done
-
 
   // const submitResults = () => {
   //   let result = [];
@@ -273,14 +276,12 @@ const Game = () => {
           }
           key={i}
         >
-          {userseq[i]}
+          {userseq[i] === "" ? "empty" : userseq[i]}
         </button>
       );
     }
     return buttons;
   };
-
-  //What needs to be done when the submit button is clicked?
 
   return (
     <>
@@ -311,17 +312,57 @@ const Game = () => {
         </div>
         <button onClick={() => setNewGame(true)}>New Game</button>
       </header>
-      <main>
-        <button onClick={() => setSubmit(submit === false ? true : false)}> 
-          Submit
-        </button>
+      <main className="game-board">
         <div>hidden sequence is: {seq}</div>
         <div>user sequence is: {userseq} </div>
         <div>hits : {hits}</div>
         <div>blows : {blows}</div>
-        <div>{userButtons()}</div>
-        <div>{generateButtons()}</div>
+        {turn > 0 ? (
+          <div className="history">
+            {/* <div className="score">
+              Hits: {hits} Blows: {blows}
+            </div> */}
+            <div className="boxes">
+              {results.map((array, i) => (
+                <div key={i}>
+                  {array.map((item, j) => (
+                    <div className={item} key={j}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="columns">
+              {history.map((array, i) => (
+                <div key={i}>
+                  {array.map((item, j) => (
+                    <div className={item} key={j}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        <div className="present">
+          <div className="boxes">
+            {resultsToArray(0, 0, slots).map((item, i) => (
+              <div key={i} className={item}>
+                {item}
+              </div>
+            ))}
+          </div>
+          <div className="columns">{userButtons()}</div>
+        </div>
       </main>
+      <footer>
+        <div>{generateButtons()}</div>
+        <button onClick={() => setSubmit(submit === false ? true : false)}>
+          Submit
+        </button>
+      </footer>
     </>
   );
 };
