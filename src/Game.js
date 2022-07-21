@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 //DONE - submit button => takes user sequence outputs resulting hits/blows, "saves" all results onto the screen ... perhaps a separate usestate for results in json
 //DONE - sets turns (need for rendering hits/blows for each turn)
 // - allows user inputted area to pivot after the historical portion
-// - maybe make a turn count, to show you won in x turns
+//DONE - maybe make a turn count, to show you won in x turns
 
+//DONE - state for an array of aggregate results in the format Hits: x Blows: x
 // haswon state -> triggers after submission button detects 4 hits
 
 //DONE - user sequence inputs
@@ -53,7 +54,6 @@ const generateSequence = (colors, slots) => {
 //function that checks hits and blows.. returns a list in the form of [hits, blows]
 //hits indicate a correct colors at the correct position
 //blows indicate a color present in the sequence
-
 const scoreChecker = (seq, userseq) => {
   let tempseq = [...seq];
   let tempuser = [...userseq];
@@ -154,7 +154,7 @@ const resultsToArray = (hits, blows, slots) => {
     }
   }
 
-  for (let i = 0; i < slots - count; i++) {
+  for (let i = 0; i < (slots - count); i++) {
     temp.push("none");
   }
   return temp;
@@ -175,16 +175,29 @@ const Game = () => {
   // progressive
   const [history, setHistory] = useState([]);
   const [results, setResults] = useState([]);
+  const [score, setScore] = useState([]);
 
   // const [history, setHistory] = useState([]);
   // const [active, setActive] = useState(false)                //state for if an item is present in user seq
 
   //create an array for hits and blows that can be indexed by turn
-  let hits = scoreChecker(seq, userseq)[0];
-  let blows = scoreChecker(seq, userseq)[1];
+  // manage something with scores on first render 
+  // pain in the ass, as hits/blows are interconnected with other functions
+  // maybe do not touch hits and blows, and instead have score as an isolated segment used only for the functionality of displaying score history 
+   // for some reason it renders 3 times: twice with hits/blows empty and once with the pertinent results
+  let hits = scoreChecker(seq,userseq)[0];
+  let blows = scoreChecker(seq,userseq)[1];
 
   //testing
   //Errors?
+  // - submisson available when empty user inputs present.. set a limit to only submit if userseq.length === slots
+
+  //updates historic score
+  const updateScore = () => {
+    let temp = [...score];
+    temp.push(scoreChecker(seq,userseq));
+    setScore(temp);
+  }
 
   //updates user input history
   const updateHistory = () => {
@@ -206,14 +219,12 @@ const Game = () => {
     setResults(temp);
   };
 
-  useEffect(() => {
-    console.log(typeof results);
-  })
 
   // - submit button not outputting html elements
   useEffect(() => {
     updateHistory();
     updateResults();
+    updateScore();
     setTurn((turn) => turn + 1);
     setUserSeq(blanks(slots));
     // eslint-disable-next-line
@@ -228,18 +239,9 @@ const Game = () => {
     setTurn(0);
     setHistory([]);
     setResults([]);
+    setScore([]);
   }, [newgame, colors, slots]); //changed for testing... *remember to change back to [newgame,colors,slots] when testing is done
 
-  // const submitResults = () => {
-  //   let result = [];
-  //   result.push(
-  //     <div>{userseq}</div>
-  //     // <div>{hits}</div>
-  //     // <div>{blows}</div>
-  //   );
-  //   console.log(result);
-  //   return result;
-  // };
 
   //function that returns buttons of colors available
   const generateButtons = () => {
@@ -315,13 +317,13 @@ const Game = () => {
       <main className="game-board">
         <div>hidden sequence is: {seq}</div>
         <div>user sequence is: {userseq} </div>
-        <div>hits : {hits}</div>
-        <div>blows : {blows}</div>
         {turn > 0 ? (
           <div className="history">
-            {/* <div className="score">
-              Hits: {hits} Blows: {blows}
-            </div> */}
+            <div className="score">
+              {score.map((item,i) => (
+                <span key={i}>Hits: {item[0]} Blows: {item[1]}</span>
+              ))}
+            </div>
             <div className="boxes">
               {results.map((array, i) => (
                 <div key={i}>
