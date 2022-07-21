@@ -171,6 +171,7 @@ const Game = () => {
   const [newgame, setNewGame] = useState(false);
   const [turn, setTurn] = useState(0);
   const [submit, setSubmit] = useState(false);
+  const [hasWon, setHasWon] = useState(false);
 
   // progressive
   const [history, setHistory] = useState([]);
@@ -227,6 +228,7 @@ const Game = () => {
     updateScore();
     setTurn((turn) => turn + 1);
     setUserSeq(blanks(slots));
+    if (hits === 4 ? setHasWon(true) : null);
     // eslint-disable-next-line
   }, [submit]); //above comment removes dependency yelling
 
@@ -240,6 +242,7 @@ const Game = () => {
     setHistory([]);
     setResults([]);
     setScore([]);
+    setHasWon(false)
   }, [newgame, colors, slots]); //changed for testing... *remember to change back to [newgame,colors,slots] when testing is done
 
 
@@ -348,7 +351,7 @@ const Game = () => {
             </div>
           </div>
         ) : null}
-        <div className="present">
+        { hasWon ? null : <div className="present">
           <div className="boxes">
             {resultsToArray(0, 0, slots).map((item, i) => (
               <div key={i} className={item}>
@@ -357,14 +360,16 @@ const Game = () => {
             ))}
           </div>
           <div className="columns">{userButtons()}</div>
-        </div>
+        </div>}
       </main>
+      { hasWon ? <div>Solved in {turn} turn{turn > 1 ? "s." : "."}</div> 
+      :
       <footer>
         <div>{generateButtons()}</div>
-        <button onClick={() => setSubmit(submit === false ? true : false)}>
+        <button onClick={() => userseq.includes("") ? null : setSubmit(submit === false ? true : false)}>
           Submit
         </button>
-      </footer>
+      </footer>}
     </>
   );
 };
