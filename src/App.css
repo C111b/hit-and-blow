@@ -1,0 +1,79 @@
+/* orientation */
+.header {
+    display:flex
+    
+}
+
+
+
+
+
+
+/* shaping  */
+div, 
+button {
+    box-sizing: border-box;
+    margin: 0;
+}
+.circle {
+    background-color: hsla(0, 0%, 0%, 0.452);
+    width: 1rem;
+    height: 1rem;
+    padding: 1rem;
+    border-radius: 50%;
+    font-size: 0;
+
+}
+
+.small-circle {
+    border-radius: 50%;
+    border-color: black;
+    border-style: solid;
+    width: .5rem;
+    height: .5rem;
+    padding: .5rem;
+    font-size: 0;
+    background-color: hsla(0, 0%, 0%, 0.452);
+}
+
+/* results */
+.hit {
+    border-color: black;
+    background-color: hsla(0, 100%, 56%, 0.795);
+}
+.blow {
+    background-color: hsla(0, 9%, 98%, 0.801);
+}
+
+/* coloring */
+/* there should be a better way for this... */
+.blue {
+    background-color: blue;
+}
+.red {
+    background-color:red;
+}
+.green {
+    background-color: green;
+}
+.yellow {
+    background-color: yellow;
+}
+.purple {
+    background-color: purple;
+}
+.white {
+    background-color: white;
+}
+.orange {
+    background-color: orange;
+}
+.grey {
+    background-color: gray;
+}
+.brown {
+    background-color: brown;
+}
+/* .empty {
+    background-color: hsla(0, 0%, 0%, 0.452);
+} */

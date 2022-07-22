@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "./App.css";
 //Hit and Blow
 //DONE - set number of colors
 //DONE - set number of slots
@@ -10,9 +10,11 @@ import { useEffect, useState } from "react";
 //DONE - sets turns (need for rendering hits/blows for each turn)
 // - allows user inputted area to pivot after the historical portion
 //DONE - maybe make a turn count, to show you won in x turns
+// - function that filters duplicates in sequence (extend for later) with material ui switch
+// - functionality for setting #of turns
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
-// haswon state -> triggers after submission button detects 4 hits
+//DONE haswon state -> triggers after submission button detects 4 hits
 
 //DONE - user sequence inputs
 //DONE - checks if user inputs alligns with sequence
@@ -154,13 +156,11 @@ const resultsToArray = (hits, blows, slots) => {
     }
   }
 
-  for (let i = 0; i < (slots - count); i++) {
+  for (let i = 0; i < slots - count; i++) {
     temp.push("none");
   }
   return temp;
 };
-
-//function that filters duplicates in sequence (extend for later)
 
 const Game = () => {
   // initializing
@@ -173,32 +173,20 @@ const Game = () => {
   const [submit, setSubmit] = useState(false);
   const [hasWon, setHasWon] = useState(false);
 
-  // progressive
+  // progressive after turn > 0
   const [history, setHistory] = useState([]);
   const [results, setResults] = useState([]);
   const [score, setScore] = useState([]);
 
-  // const [history, setHistory] = useState([]);
-  // const [active, setActive] = useState(false)                //state for if an item is present in user seq
-
-  //create an array for hits and blows that can be indexed by turn
-  // manage something with scores on first render 
-  // pain in the ass, as hits/blows are interconnected with other functions
-  // maybe do not touch hits and blows, and instead have score as an isolated segment used only for the functionality of displaying score history 
-   // for some reason it renders 3 times: twice with hits/blows empty and once with the pertinent results
-  let hits = scoreChecker(seq,userseq)[0];
-  let blows = scoreChecker(seq,userseq)[1];
-
-  //testing
-  //Errors?
-  // - submisson available when empty user inputs present.. set a limit to only submit if userseq.length === slots
+  let hits = scoreChecker(seq, userseq)[0];
+  let blows = scoreChecker(seq, userseq)[1];
 
   //updates historic score
   const updateScore = () => {
     let temp = [...score];
-    temp.push(scoreChecker(seq,userseq));
+    temp.push(scoreChecker(seq, userseq));
     setScore(temp);
-  }
+  };
 
   //updates user input history
   const updateHistory = () => {
@@ -220,8 +208,6 @@ const Game = () => {
     setResults(temp);
   };
 
-
-  // - submit button not outputting html elements
   useEffect(() => {
     updateHistory();
     updateResults();
@@ -242,9 +228,8 @@ const Game = () => {
     setHistory([]);
     setResults([]);
     setScore([]);
-    setHasWon(false)
-  }, [newgame, colors, slots]); //changed for testing... *remember to change back to [newgame,colors,slots] when testing is done
-
+    setHasWon(false);
+  }, [newgame, colors, slots]); 
 
   //function that returns buttons of colors available
   const generateButtons = () => {
@@ -253,7 +238,7 @@ const Game = () => {
       //output buttons with the color name
       buttons.push(
         <button
-          className={colors[i]}
+          className={colors[i] + " " + "circle"}
           //on click set that button's color to repplace a blank "" element of userseq
           onClick={() =>
             userseq.includes("")
@@ -274,15 +259,15 @@ const Game = () => {
     let buttons = [];
     for (let i = 0; i < userseq.length; i++) {
       buttons.push(
-        <button
-          className={userseq[i] === "" ? "empty" : userseq[i]}
-          onClick={() =>
-            userseq[i] === "" ? null : setUserSeq(empty(userseq, i))
-          }
-          key={i}
-        >
-          {userseq[i] === "" ? "empty" : userseq[i]}
-        </button>
+          <button
+            className={userseq[i] === "" ? "empty" + " " + "circle" : userseq[i] + " " + "circle"}
+            onClick={() =>
+              userseq[i] === "" ? null : setUserSeq(empty(userseq, i))
+            }
+            key={i}
+          >
+            {userseq[i] === "" ? "empty" : userseq[i]}
+          </button>
       );
     }
     return buttons;
@@ -320,18 +305,21 @@ const Game = () => {
       <main className="game-board">
         <div>hidden sequence is: {seq}</div>
         <div>user sequence is: {userseq} </div>
+        {/* *testing remember to remove */}
         {turn > 0 ? (
           <div className="history">
             <div className="score">
-              {score.map((item,i) => (
-                <span key={i}>Hits: {item[0]} Blows: {item[1]}</span>
+              {score.map((item, i) => (
+                <span key={i}>
+                  Hits: {item[0]} Blows: {item[1]}
+                </span>
               ))}
             </div>
             <div className="boxes">
               {results.map((array, i) => (
-                <div key={i}>
+                <div className="box" key={i}>
                   {array.map((item, j) => (
-                    <div className={item} key={j}>
+                    <div className={item + " " + "small-circle"} key={j}>
                       {item}
                     </div>
                   ))}
@@ -340,9 +328,9 @@ const Game = () => {
             </div>
             <div className="columns">
               {history.map((array, i) => (
-                <div key={i}>
+                <div className="column" key={i}>
                   {array.map((item, j) => (
-                    <div className={item} key={j}>
+                    <div className={item + " " + "circle"} key={j}>
                       {item}
                     </div>
                   ))}
@@ -351,25 +339,37 @@ const Game = () => {
             </div>
           </div>
         ) : null}
-        { hasWon ? null : <div className="present">
-          <div className="boxes">
-            {resultsToArray(0, 0, slots).map((item, i) => (
-              <div key={i} className={item}>
-                {item}
-              </div>
-            ))}
+        {hasWon ? null : (
+          <div className="present">
+            <div className="box">
+              {resultsToArray(0, 0, slots).map((item, i) => (
+                <div key={i} className={item + " " + "small-circle"}>
+                  {item}
+                </div>
+              ))}
+            </div>
+            <div className="column">{userButtons()}</div>
           </div>
-          <div className="columns">{userButtons()}</div>
-        </div>}
+        )}
       </main>
-      { hasWon ? <div>Solved in {turn} turn{turn > 1 ? "s." : "."}</div> 
-      :
-      <footer>
-        <div>{generateButtons()}</div>
-        <button onClick={() => userseq.includes("") ? null : setSubmit(submit === false ? true : false)}>
-          Submit
-        </button>
-      </footer>}
+      {hasWon ? (
+        <div>
+          Solved in {turn} turn{turn > 1 ? "s." : "."}
+        </div>
+      ) : (
+        <footer>
+          <div>{generateButtons()}</div>
+          <button
+            onClick={() =>
+              userseq.includes("")
+                ? null
+                : setSubmit(submit === false ? true : false)
+            }
+          >
+            Submit
+          </button>
+        </footer>
+      )}
     </>
   );
 };
