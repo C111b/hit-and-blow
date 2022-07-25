@@ -1,20 +1,40 @@
 /* orientation */
+:root {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+/* 
 .header {
-    display:flex
-    
+    display:flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+
+.box {
+    display: grid;
+    grid-template-columns: 1rem 1rem;
+    /* grid-auto-rows: 2rem; */
+
+}
+.boxes {
+    display: grid;
+    grid-auto-columns: 2rem;
+    grid-auto-rows: 2rem;
 }
 
 
-
-
-
-
 /* shaping  */
+/* making div and buttons the same size */
 div, 
 button {
     box-sizing: border-box;
     margin: 0;
 }
+
+/* cicles for the colors */
 .circle {
     background-color: hsla(0, 0%, 0%, 0.452);
     width: 1rem;
@@ -25,6 +45,7 @@ button {
 
 }
 
+/* circles for the results */
 .small-circle {
     border-radius: 50%;
     border-color: black;
