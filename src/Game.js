@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Stack } from '@mui/material';
 import "./App.css";
 //Hit and Blow
 //DONE - set number of colors
@@ -307,15 +308,18 @@ const Game = () => {
         <div>user sequence is: {userseq} </div>
         {/* *testing remember to remove */}
         {turn > 0 ? (
-          <div className="history">
-            <div className="score">
+          <span className="history">
+            {/* <div className="score">
               {score.map((item, i) => (
                 <span key={i}>
                   Hits: {item[0]} Blows: {item[1]}
                 </span>
               ))}
-            </div>
-            <div className="boxes">
+            </div> */}
+            <Stack className="boxes"
+              direction = "row"
+              // justifyContent="center"
+              spacing={2}>
               {results.map((array, i) => (
                 <div className="box" key={i}>
                   {array.map((item, j) => (
@@ -325,8 +329,10 @@ const Game = () => {
                   ))}
                 </div>
               ))}
-            </div>
-            <div className="columns">
+            </Stack>
+            <Stack className="columns"
+              direction= "row"
+              spacing={2}>
               {history.map((array, i) => (
                 <div className="column" key={i}>
                   {array.map((item, j) => (
@@ -336,11 +342,11 @@ const Game = () => {
                   ))}
                 </div>
               ))}
-            </div>
-          </div>
+            </Stack>
+          </span>
         ) : null}
         {hasWon ? null : (
-          <div className="present">
+          <span className="present">
             <div className="box">
               {resultsToArray(0, 0, slots).map((item, i) => (
                 <div key={i} className={item + " " + "small-circle"}>
@@ -349,7 +355,7 @@ const Game = () => {
               ))}
             </div>
             <div className="column">{userButtons()}</div>
-          </div>
+          </span>
         )}
       </main>
       {hasWon ? (

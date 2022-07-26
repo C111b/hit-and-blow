@@ -15,14 +15,9 @@
 
 .box {
     display: grid;
-    grid-template-columns: 1rem 1rem;
-    /* grid-auto-rows: 2rem; */
-
-}
-.boxes {
-    display: grid;
-    grid-auto-columns: 2rem;
-    grid-auto-rows: 2rem;
+    grid-template-columns: 1.5rem 1.5rem;
+    grid-auto-rows: 1.5rem;
+    /* margin-right: 2rem; */
 }
 
 
