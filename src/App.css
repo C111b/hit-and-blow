@@ -1,17 +1,13 @@
 /* orientation */
-:root {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    --width: 1rem;
-    --height: 1rem;
-}
-
 /* 
 .header {
     display:flex;
     justify-content: center;
     align-items: center;
+} */
+/* .history {
+    display: flex;
+    justify-content: flex-start;
 } */
 .present {
     margin-left: 1rem;
@@ -21,24 +17,45 @@
     display: grid;
     grid-template-columns: 1.5rem 1.5rem;
     grid-auto-rows: 1.5rem;
+    place-items:center;
     /* margin-right: 2rem; */
+}
+
+.history .boxes .box {
+    margin-left: 1rem;
+}
+.history .columns .column {
+    margin-left: 1rem;
 }
 
 .column {
     display:grid;
+    /* grid-template-columns: 1rem; */
     /* grid-auto-rows: 2rem; */
     /* margin-right: 2rem; */
-    margin-left: .5rem;
+    width: 48px;
+    place-items: center;
     /* grid-template-rows: 1rem; */
 
 }
 
 
 
+/* getting the general shape of orientation */
+
+/* enables present to pivot beside history */
+
+
+
 main {
-    display:flex;
+    display:flex; 
+    justify-content: center;
 }
 
+footer {
+    display: flex;
+    justify-content: center;
+}
 
 /* shaping  */
 /* making div and buttons the same size */
@@ -46,7 +63,7 @@ div,
 button {
     box-sizing: border-box;
     border: none;
-    margin: 0;
+    /* margin: 0; */
     /* width: var(width);
     height: var(height); */
 }
@@ -67,7 +84,7 @@ button {
 .small-circle {
     border-radius: 50%;
     border-color: black;
-    border-style: solid;
+    border-style: double;
     width: .5rem;
     height: .5rem;
     padding: .5rem;
@@ -77,21 +94,25 @@ button {
 
 /* results */
 .hit {
-    border-color: black;
-    background-color: hsla(0, 100%, 56%, 0.795);
+    background-color: hsla(0, 100%, 56%, 0.61);
+    border-color: hsl(0, 100%, 56%);
 }
 .blow {
     background-color: hsla(0, 9%, 98%, 0.801);
+    border-color: hsla(0, 9%, 70%, 0.801);
 }
 
 /* coloring */
 /* there should be a better way for this... */
 .none {
     background-color: rgb(202, 202, 202);
+    border-color: rgb(202, 202, 202);
+    border-style: double;
 }
 .empty {
     background-color: rgb(202, 202, 202);
     border-color: rgb(202, 202, 202);
+    border-style: double;
 }
 .blue {
     background-color: hsl(220, 100%, 50%, .9);

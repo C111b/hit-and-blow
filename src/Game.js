@@ -12,7 +12,7 @@ import "./App.css";
 //DONE - allows user inputted area to pivot after the historical portion
 //DONE - maybe make a turn count, to show you won in x turns
 // - function that filters duplicates in sequence (extend for later) with material ui switch
-//DONE - functionality for setting #of turns
+// - functionality for setting #of turns to finish
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
 //DONE haswon state -> triggers after submission button detects 4 hits
@@ -316,8 +316,9 @@ const Game = () => {
             </div> */}
             <Stack className="boxes"
               direction = "row"
+              // sx={{ justify-content: "center"}}
               // justifyContent="center"
-              spacing={2}
+              // spacing={2}
               >
               {results.map((array, i) => (
                 <div className="box" key={i}>
@@ -331,7 +332,7 @@ const Game = () => {
             </Stack>
             <Stack className="columns"
               direction= "row"
-              spacing={4}
+              // spacing={3}
               >
               {history.map((array, i) => (
                 <div className="column" key={i}>
