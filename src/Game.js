@@ -9,10 +9,10 @@ import "./App.css";
 //DONE - Figure out how to render historical attempts to view on the screen
 //DONE - submit button => takes user sequence outputs resulting hits/blows, "saves" all results onto the screen ... perhaps a separate usestate for results in json
 //DONE - sets turns (need for rendering hits/blows for each turn)
-// - allows user inputted area to pivot after the historical portion
+//DONE - allows user inputted area to pivot after the historical portion
 //DONE - maybe make a turn count, to show you won in x turns
 // - function that filters duplicates in sequence (extend for later) with material ui switch
-// - functionality for setting #of turns
+//DONE - functionality for setting #of turns
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
 //DONE haswon state -> triggers after submission button detects 4 hits
@@ -22,9 +22,7 @@ import "./App.css";
 //DONE - output hits: x and  blows: x
 //DONE - a way to add and remove items in the user sequence
 
-//for the circles use css set border radius to 100, change div classname
-// or maybe emojis
-// or maybe images
+//DONEfor the circles use css set border radius to 100, change div classname
 
 //generates a list of a specified amount of colors
 const generateColor = (num) => {
@@ -304,11 +302,11 @@ const Game = () => {
         <button onClick={() => setNewGame(true)}>New Game</button>
       </header>
       <main className="game-board">
-        <div>hidden sequence is: {seq}</div>
-        <div>user sequence is: {userseq} </div>
+        {/* <div>hidden sequence is: {seq}</div>
+        <div>user sequence is: {userseq} </div> */}
         {/* *testing remember to remove */}
         {turn > 0 ? (
-          <span className="history">
+          <div className="history">
             {/* <div className="score">
               {score.map((item, i) => (
                 <span key={i}>
@@ -319,7 +317,8 @@ const Game = () => {
             <Stack className="boxes"
               direction = "row"
               // justifyContent="center"
-              spacing={2}>
+              spacing={2}
+              >
               {results.map((array, i) => (
                 <div className="box" key={i}>
                   {array.map((item, j) => (
@@ -332,7 +331,8 @@ const Game = () => {
             </Stack>
             <Stack className="columns"
               direction= "row"
-              spacing={2}>
+              spacing={4}
+              >
               {history.map((array, i) => (
                 <div className="column" key={i}>
                   {array.map((item, j) => (
@@ -343,10 +343,10 @@ const Game = () => {
                 </div>
               ))}
             </Stack>
-          </span>
+          </div>
         ) : null}
         {hasWon ? null : (
-          <span className="present">
+          <div className={turn > 0 ? "present" : "starting"}>
             <div className="box">
               {resultsToArray(0, 0, slots).map((item, i) => (
                 <div key={i} className={item + " " + "small-circle"}>
@@ -355,7 +355,7 @@ const Game = () => {
               ))}
             </div>
             <div className="column">{userButtons()}</div>
-          </span>
+          </div>
         )}
       </main>
       {hasWon ? (

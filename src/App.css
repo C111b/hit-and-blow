@@ -3,6 +3,8 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    --width: 1rem;
+    --height: 1rem;
 }
 
 /* 
@@ -11,7 +13,9 @@
     justify-content: center;
     align-items: center;
 } */
-
+.present {
+    margin-left: 1rem;
+}
 
 .box {
     display: grid;
@@ -20,18 +24,37 @@
     /* margin-right: 2rem; */
 }
 
+.column {
+    display:grid;
+    /* grid-auto-rows: 2rem; */
+    /* margin-right: 2rem; */
+    margin-left: .5rem;
+    /* grid-template-rows: 1rem; */
+
+}
+
+
+
+main {
+    display:flex;
+}
+
 
 /* shaping  */
 /* making div and buttons the same size */
 div, 
 button {
     box-sizing: border-box;
+    border: none;
     margin: 0;
+    /* width: var(width);
+    height: var(height); */
 }
 
 /* cicles for the colors */
 .circle {
     background-color: hsla(0, 0%, 0%, 0.452);
+    border-style: outset;
     width: 1rem;
     height: 1rem;
     padding: 1rem;
@@ -63,32 +86,48 @@ button {
 
 /* coloring */
 /* there should be a better way for this... */
+.none {
+    background-color: rgb(202, 202, 202);
+}
+.empty {
+    background-color: rgb(202, 202, 202);
+    border-color: rgb(202, 202, 202);
+}
 .blue {
-    background-color: blue;
+    background-color: hsl(220, 100%, 50%, .9);
+    border-color: hsl(220, 100%, 50%);
 }
 .red {
-    background-color:red;
+    background-color:hsl(-10, 100%, 50%, .9);
+    border-color:hsl(-10, 100%, 50%);
 }
 .green {
-    background-color: green;
+    background-color: hsl(100, 100%, 25%, .9);
+    border-color: hsl(100, 100%, 25%);
 }
 .yellow {
-    background-color: yellow;
+    background-color: hsl(50, 100%, 50%, .9);
+    border-color: hsl(50, 100%, 50%);
 }
 .purple {
-    background-color: purple;
+    background-color: hsl(290, 58%, 46%, .9);
+    border-color: hsl(290, 58%, 46%);
 }
 .white {
-    background-color: white;
+    background-color: hsl(0, 0%, 100%, .9);
+    border-color: hsl(0, 0%, 70%);
 }
 .orange {
-    background-color: orange;
+    background-color: hsl(25, 100%, 50%, .9);
+    border-color: hsl(25, 100%, 50%);
 }
 .grey {
-    background-color: gray;
+    background-color: hsl(30, 0%, 50%, .9);
+    border-color: hsl(30, 0%, 50%);
 }
 .brown {
-    background-color: brown;
+    background-color: hsl(20, 59%, 41%, .9);
+    border-color: hsl(20, 59%, 41%);
 }
 /* .empty {
     background-color: hsla(0, 0%, 0%, 0.452);
