@@ -58,8 +58,7 @@ header {
     ". ha . . . "
     ". ha . hc . "
     ". . . . ."
-    ". hd hd hd ."
-    ". . . . .";
+    ". hd hd hd .";
 }
 
 .sliders {
@@ -71,7 +70,32 @@ header {
 }
 
 .new-game {
-    grid-area: hc
+    grid-area: hc;
+}
+
+.turns-message {
+    grid-area: hd;
+}
+
+
+footer {
+    display: grid;
+    justify-items:center;
+    grid-auto-rows: minmax(2rem, auto);
+    /* grid-auto-rows: 1fr 1fr 1fr; */
+    grid-template-columns:  1fr 1fr 1fr;
+
+    grid-template-areas:
+    ". . ."
+    ". fa ."
+    ". fb .";
+}
+
+.color-buttons {
+    grid-area: fa;
+}
+.submit {
+    grid-area: fb;
 }
 
 main {
@@ -79,10 +103,7 @@ main {
     justify-content: center;
 }
 
-footer {
-    display: flex;
-    justify-content: center;
-}
+
 
 /* shaping  */
 /* making div and buttons the same size */

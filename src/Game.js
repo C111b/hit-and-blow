@@ -8,6 +8,7 @@ import {
   Typography,
   Grid,
   Box,
+  Button,
 } from "@mui/material";
 
 import "./App.css";
@@ -321,102 +322,102 @@ const Game = () => {
           }
         />
         <div className="sliders">
-        <Box sx={{ width: 200 }}>
-          <Typography id="color-slider" gutterBottom>
-            # Colors:
-          </Typography>
-          <Grid container spacing={2} alignItems="start">
-            <Grid item xs>
-              <Slider
-                value={typeof ncolors === "number" ? ncolors : 0}
-                onChange={handleColors}
-                aria-labelledby="colors-slider"
-                defaultValue={6}
-                valueLabelDisplay="auto"
-                min={1}
-                marks
-                max={9}
-              />
+          <Box sx={{ width: 200 }}>
+            <Typography id="color-slider" gutterBottom>
+              # COLORS
+            </Typography>
+            <Grid container spacing={2} alignItems="start">
+              <Grid item xs>
+                <Slider
+                  value={typeof ncolors === "number" ? ncolors : 0}
+                  onChange={handleColors}
+                  aria-labelledby="colors-slider"
+                  defaultValue={6}
+                  valueLabelDisplay="auto"
+                  min={1}
+                  marks
+                  max={9}
+                />
+              </Grid>
+              <Grid item>
+                <Input
+                  sx={{ width: 40 }}
+                  value={ncolors}
+                  size="small"
+                  onChange={handleColors}
+                  inputProps={{
+                    step: 1,
+                    min: 1,
+                    max: 9,
+                    type: "number",
+                    "aria-labelledby": "colors-slider",
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item>
-              <Input
-                sx={{ width: 40 }}
-                value={ncolors}
-                size="small"
-                onChange={handleColors}
-                inputProps={{
-                  step: 1,
-                  min: 1,
-                  max: 9,
-                  type: "number",
-                  "aria-labelledby": "colors-slider",
-                }}
-              />
+            <Typography id="turns-slider" gutterBottom>
+              # TURNS
+            </Typography>
+            <Grid container spacing={2} alignItems="start">
+              <Grid item xs>
+                <Slider
+                  value={typeof turnstolose === "number" ? turnstolose : 0}
+                  onChange={handleTTL}
+                  aria-labelledby="turns-slider"
+                  defaultValue={6}
+                  valueLabelDisplay="auto"
+                  min={1}
+                  marks
+                  max={20}
+                />
+              </Grid>
+              <Grid item>
+                <Input
+                  sx={{ width: 40 }}
+                  value={turnstolose}
+                  size="small"
+                  onChange={handleTTL}
+                  inputProps={{
+                    step: 1,
+                    min: 1,
+                    max: 20,
+                    type: "number",
+                    "aria-labelledby": "turns-slider",
+                  }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-          <Typography id="turns-slider" gutterBottom>
-            # Turns
-          </Typography>
-          <Grid container spacing={2} alignItems="start">
-            <Grid item xs>
-              <Slider
-                value={typeof turnstolose === "number" ? turnstolose : 0}
-                onChange={handleTTL}
-                aria-labelledby="turns-slider"
-                defaultValue={6}
-                valueLabelDisplay="auto"
-                min={1}
-                marks
-                max={20}
-              />
-            </Grid>
-            <Grid item>
-              <Input
-                sx={{ width: 40 }}
-                value={turnstolose}
-                size="small"
-                onChange={handleTTL}
-                inputProps={{
-                  step: 1,
-                  min: 1,
-                  max: 20,
-                  type: "number",
-                  "aria-labelledby": "turns-slider",
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Typography id="slots-slider" gutterBottom>
-            # Slots
-          </Typography>
-          <Grid container spacing={2} alignItems="start">
-            <Grid item xs>
-              <Slider
-                value={slots}
-                aria-labelledby="slots-slider"
-                defaultValue={4}
-                valueLabelDisplay="auto"
-                min={1}
-                marks
-                max={colors.length} // do something here
-                onChange={handleSlots}
-              />
-            </Grid>
-            <Grid item>
-              <Input
-                sx={{ width: 40 }}
-                value={slots}
-                size="small"
-                onChange={handleSlots}
-                inputProps={{
-                  step: 1,
-                  min: 1,
-                  max: colors.length,
-                  type: "number",
-                  "aria-labelledby": "slots-slider",
-                }}
-              />
-              {/* <input
+            <Typography id="slots-slider" gutterBottom>
+              # SLOTS
+            </Typography>
+            <Grid container spacing={2} alignItems="start">
+              <Grid item xs>
+                <Slider
+                  value={slots}
+                  aria-labelledby="slots-slider"
+                  defaultValue={4}
+                  valueLabelDisplay="auto"
+                  min={1}
+                  marks
+                  max={colors.length} // do something here
+                  onChange={handleSlots}
+                />
+              </Grid>
+              <Grid item>
+                <Input
+                  sx={{ width: 40 }}
+                  value={slots}
+                  size="small"
+                  onChange={handleSlots}
+                  inputProps={{
+                    step: 1,
+                    min: 1,
+                    max: colors.length,
+                    type: "number",
+                    "aria-labelledby": "slots-slider",
+                  }}
+                />
+                {/* <input
               type="text"
               size="1"
               maxLength="1"
@@ -429,11 +430,19 @@ const Game = () => {
                   : setSlots(parseInt(e.target.value)); //*maybe write a message that says either decrease #slots or increase #colors
               }}
             /> */}
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
         </div>
-        <button className="new-game" onClick={() => setNewGame(true)}>New Game</button>
+        <Button
+
+          size="medium"
+          className="new-game"
+          onClick={() => setNewGame(true)}
+          variant="contained"
+        >
+          New Game
+        </Button>
       </header>
       <main className="game-board">
         {/* <div>hidden sequence is: {seq}</div>
@@ -502,8 +511,12 @@ const Game = () => {
         </div>
       ) : (
         <footer>
-          <div>{generateButtons()}</div>
-          <button
+          <div className="color-buttons">{generateButtons()}</div>
+          <Button
+            sx={{ width: 100 }}
+            size="large"
+            className="submit"
+            variant="contained"
             onClick={() =>
               userseq.includes("")
                 ? null
@@ -511,7 +524,7 @@ const Game = () => {
             }
           >
             Submit
-          </button>
+          </Button>
         </footer>
       )}
 
