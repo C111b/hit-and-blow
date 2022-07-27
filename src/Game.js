@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Stack, Switch, FormControlLabel, Slider, MuiInput, Typography, Grid, Box } from "@mui/material";
+import {
+  Stack,
+  Switch,
+  FormControlLabel,
+  Slider,
+  Input,
+  Typography,
+  Grid,
+  Box,
+} from "@mui/material";
 
 import "./App.css";
 //Hit and Blow
@@ -288,11 +297,12 @@ const Game = () => {
   const handleTTL = (event, newValue) => {
     setTurnsToLose(newValue);
   };
+
   const handleSlots = (event, newValue) => {
     return hasdupe
       ? setSlots(newValue)
       : newValue > colors.length
-      ? null    // do something here to indicate that colors must be changed or whatever
+      ? null // do something here to indicate that colors must be changed or whatever
       : setSlots(newValue);
   };
 
@@ -300,8 +310,9 @@ const Game = () => {
     <>
       <header>
         <FormControlLabel
+          className="dupe"
           labelPlacement="start"
-          label="Allow Duplicates"
+          label="Dupe Colors"
           control={
             <Switch
               defaultChecked
@@ -309,83 +320,120 @@ const Game = () => {
             />
           }
         />
-        <div>
-          sequence {seq} dupes? {hasdupe ? "yes" : "no"}
-        </div>
-        <Box>
+        <div className="sliders">
+        <Box sx={{ width: 200 }}>
           <Typography id="color-slider" gutterBottom>
-          Number of Colors
+            # Colors:
           </Typography>
-        <Grid container spacing={2} alignItems="start">
-         <Grid item xs> 
-            <Slider
-              value={ncolors}
-              aria-label="colors"
-              defaultValue={6}
-              valueLabelDisplay="auto"
-              min={1}
-              marks
-              max={10}
-              onChange={handleColors}
-            />
+          <Grid container spacing={2} alignItems="start">
+            <Grid item xs>
+              <Slider
+                value={typeof ncolors === "number" ? ncolors : 0}
+                onChange={handleColors}
+                aria-labelledby="colors-slider"
+                defaultValue={6}
+                valueLabelDisplay="auto"
+                min={1}
+                marks
+                max={9}
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                sx={{ width: 40 }}
+                value={ncolors}
+                size="small"
+                onChange={handleColors}
+                inputProps={{
+                  step: 1,
+                  min: 1,
+                  max: 9,
+                  type: "number",
+                  "aria-labelledby": "colors-slider",
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <Input
-              value = {ncolors}
-              size="small"
-              onChange={handleColors}
-            />
+          <Typography id="turns-slider" gutterBottom>
+            # Turns
+          </Typography>
+          <Grid container spacing={2} alignItems="start">
+            <Grid item xs>
+              <Slider
+                value={typeof turnstolose === "number" ? turnstolose : 0}
+                onChange={handleTTL}
+                aria-labelledby="turns-slider"
+                defaultValue={6}
+                valueLabelDisplay="auto"
+                min={1}
+                marks
+                max={20}
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                sx={{ width: 40 }}
+                value={turnstolose}
+                size="small"
+                onChange={handleTTL}
+                inputProps={{
+                  step: 1,
+                  min: 1,
+                  max: 20,
+                  type: "number",
+                  "aria-labelledby": "turns-slider",
+                }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <div>
-          <span># of turns: </span>
-          <Slider
-            value={turnstolose}
-            aria-label="turnstolose"
-            defaultValue={6}
-            valueLabelDisplay="auto"
-            min={1}
-            marks
-            max={10}
-            onChange={handleTTL}
-          />
-          <input
-            type="text"
-            size="1"
-            maxLength="1"
-            value={turnstolose || ""}
-            onChange={(e) => {
-              setTurnsToLose(e.target.value);
-            }}
-          />
+          <Typography id="slots-slider" gutterBottom>
+            # Slots
+          </Typography>
+          <Grid container spacing={2} alignItems="start">
+            <Grid item xs>
+              <Slider
+                value={slots}
+                aria-labelledby="slots-slider"
+                defaultValue={4}
+                valueLabelDisplay="auto"
+                min={1}
+                marks
+                max={colors.length} // do something here
+                onChange={handleSlots}
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                sx={{ width: 40 }}
+                value={slots}
+                size="small"
+                onChange={handleSlots}
+                inputProps={{
+                  step: 1,
+                  min: 1,
+                  max: colors.length,
+                  type: "number",
+                  "aria-labelledby": "slots-slider",
+                }}
+              />
+              {/* <input
+              type="text"
+              size="1"
+              maxLength="1"
+              value={slots || ""}
+              onChange={(e) => {
+                return hasdupe
+                  ? setSlots(parseInt(e.target.value))
+                  : parseInt(e.target.value) > colors.length
+                  ? null
+                  : setSlots(parseInt(e.target.value)); //*maybe write a message that says either decrease #slots or increase #colors
+              }}
+            /> */}
+            </Grid>
+          </Grid>
+        </Box>
         </div>
-        <div>
-          <span># of slots: </span>
-          <Slider
-            value={slots}
-            aria-label="turnstolose"
-            defaultValue={6}
-            valueLabelDisplay="auto"
-            min={1}
-            marks
-            max={hasdupe ? 10 : slots > colors.length ? null : slots} // do something here
-            onChange={handleSlots}
-          />
-          <input
-            type="text"
-            size="1"
-            maxLength="1"
-            value={slots || ""}
-            onChange={(e) => {
-              return hasdupe
-                ? setSlots(parseInt(e.target.value))
-                : parseInt(e.target.value) > colors.length
-                ? null
-                : setSlots(parseInt(e.target.value)); //*maybe write a message that says either decrease #slots or increase #colors
-            }}
-          />
-          </Box>
-        <button onClick={() => setNewGame(true)}>New Game</button>
+        <button className="new-game" onClick={() => setNewGame(true)}>New Game</button>
       </header>
       <main className="game-board">
         {/* <div>hidden sequence is: {seq}</div>
@@ -467,7 +515,7 @@ const Game = () => {
         </footer>
       )}
 
-      {turnstolose === turn ? (
+      {/* {turnstolose === turn ? (
         <div>you lose</div>
       ) : (
         <footer>
@@ -483,7 +531,7 @@ const Game = () => {
           </button>
           <div> {turnstolose - turn} turns left</div>
         </footer>
-      )}
+      )} */}
     </>
   );
 };

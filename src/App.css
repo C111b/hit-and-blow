@@ -48,10 +48,34 @@
 header {
     display: grid;
     justify-content: center;
+
+    grid-template-columns: 5.5fr 3fr 1fr 2fr 5.5fr;
+    grid-auto-rows: minmax(3rem, auto);
+
+    grid-template-areas:
+    ". . . . ."
+    ". ha .  hb ."
+    ". ha . . . "
+    ". ha . hc . "
+    ". . . . ."
+    ". hd hd hd ."
+    ". . . . .";
+}
+
+.sliders {
+    grid-area: ha;
+}
+
+.dupe {
+    grid-area: hb;
+}
+
+.new-game {
+    grid-area: hc
 }
 
 main {
-    display:flex; 
+    display: flex; 
     justify-content: center;
 }
 
