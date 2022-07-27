@@ -11,7 +11,7 @@ import "./App.css";
 //DONE - sets turns (need for rendering hits/blows for each turn)
 //DONE - allows user inputted area to pivot after the historical portion
 //DONE - maybe make a turn count, to show you won in x turns
-// - function that filters duplicates in sequence (extend for later) with material ui switch
+//DONE - function that filters duplicates in sequence (extend for later) with material ui switch
 // - functionality for setting #of turns to finish
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
@@ -293,12 +293,13 @@ const Game = () => {
         </div>
         <button onClick={() => setNewGame(true)}>New Game</button>
         <FormControlLabel
+          
+          labelPlacement="start"
+          label="Allow Duplicates"
           control={
             <Switch
               defaultChecked
               onChange={() => hasdupe ? setHasDupe(false) : setHasDupe(true)}
-          label="AllowDuplicates"
-          labelPlacement="top"
           />}
         />
       </header>
