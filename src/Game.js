@@ -23,7 +23,7 @@ import "./App.css";
 //DONE - allows user inputted area to pivot after the historical portion
 //DONE - maybe make a turn count, to show you won in x turns
 //DONE - function that filters duplicates in sequence (extend for later) with material ui switch
-// - functionality for setting #of turns to finish
+//DONE- functionality for setting #of turns to finish
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
 //DONE haswon state -> triggers after submission button detects 4 hits
@@ -162,6 +162,7 @@ const resultsToArray = (hits, blows, slots) => {
 
 const Game = () => {
   // initializing
+
   const [colors, setColors] = useState(generateColor(6));
   const [slots, setSlots] = useState(4);
   const [seq, setSeq] = useState(generateSequence(colors, slots));
@@ -171,7 +172,6 @@ const Game = () => {
   const [turnstolose, setTurnsToLose] = useState(6);
   const [submit, setSubmit] = useState(false);
   const [hasWon, setHasWon] = useState(false);
-  const [hasLost, setHasLost] = useState(false);
   const [hasdupe, setHasDupe] = useState(true);
 
   // progressive after turn > 0
@@ -211,6 +211,9 @@ const Game = () => {
     console.log(temp); // *testing
     setResults(temp);
   };
+
+  //testing
+  console.log(seq);
 
   useEffect(() => {
     updateHistory();
@@ -291,20 +294,32 @@ const Game = () => {
   //MUI event handlers and stylers
 
   // for color slider
-  const handleColors = (event, newValue) => {
+  const handleSliderColors = (event, newValue) => {
     setNColors(newValue);
   };
 
-  const handleTTL = (event, newValue) => {
+  const handleInputColors = (e) => {
+    setNColors(e.target.value === "" ? "" : Number(e.target.value));
+  };
+
+  const handleSliderTTL = (event, newValue) => {
     setTurnsToLose(newValue);
   };
 
-  const handleSlots = (event, newValue) => {
+  const handleInputTTL = (e) => {
+    setTurnsToLose(e.target.value === "" ? "" : Number(e.target.value));
+  };
+
+  const handleSliderSlots = (event, newValue) => {
     return hasdupe
       ? setSlots(newValue)
       : newValue > colors.length
       ? null // do something here to indicate that colors must be changed or whatever
       : setSlots(newValue);
+  };
+
+  const handleInputSlots = (e) => {
+    setNColors(e.target.value === "" ? "" : Number(e.target.value));
   };
 
   return (
@@ -313,7 +328,7 @@ const Game = () => {
         <FormControlLabel
           className="dupe"
           labelPlacement="start"
-          label="Dupe Colors"
+          label="Duplicate Colors"
           control={
             <Switch
               defaultChecked
@@ -330,7 +345,7 @@ const Game = () => {
               <Grid item xs>
                 <Slider
                   value={typeof ncolors === "number" ? ncolors : 0}
-                  onChange={handleColors}
+                  onChange={handleSliderColors}
                   aria-labelledby="colors-slider"
                   defaultValue={6}
                   valueLabelDisplay="auto"
@@ -344,7 +359,7 @@ const Game = () => {
                   sx={{ width: 40 }}
                   value={ncolors}
                   size="small"
-                  onChange={handleColors}
+                  onChange={handleInputColors}
                   inputProps={{
                     step: 1,
                     min: 1,
@@ -362,7 +377,7 @@ const Game = () => {
               <Grid item xs>
                 <Slider
                   value={typeof turnstolose === "number" ? turnstolose : 0}
-                  onChange={handleTTL}
+                  onChange={handleSliderTTL}
                   aria-labelledby="turns-slider"
                   defaultValue={6}
                   valueLabelDisplay="auto"
@@ -376,7 +391,7 @@ const Game = () => {
                   sx={{ width: 40 }}
                   value={turnstolose}
                   size="small"
-                  onChange={handleTTL}
+                  onChange={handleInputTTL}
                   inputProps={{
                     step: 1,
                     min: 1,
@@ -400,7 +415,7 @@ const Game = () => {
                   min={1}
                   marks
                   max={colors.length} // do something here
-                  onChange={handleSlots}
+                  onChange={handleSliderSlots}
                 />
               </Grid>
               <Grid item>
@@ -408,7 +423,7 @@ const Game = () => {
                   sx={{ width: 40 }}
                   value={slots}
                   size="small"
-                  onChange={handleSlots}
+                  onChange={handleInputSlots}
                   inputProps={{
                     step: 1,
                     min: 1,
@@ -435,7 +450,6 @@ const Game = () => {
           </Box>
         </div>
         <Button
-
           size="medium"
           className="new-game"
           onClick={() => setNewGame(true)}
@@ -443,6 +457,9 @@ const Game = () => {
         >
           New Game
         </Button>
+        { turnstolose - turn !== 0 && !hasWon ? 
+          (<div className="turns-message"> {turnstolose - turn} Turn{turnstolose - turn === 1 ? " left." : "s left."}</div>) : null
+        }
       </header>
       <main className="game-board">
         {/* <div>hidden sequence is: {seq}</div>
@@ -492,7 +509,7 @@ const Game = () => {
             </Stack>
           </div>
         ) : null}
-        {hasWon ? null : (
+        {hasWon ? null : turnstolose - turn === 0 ? null : (
           <div className={turn > 0 ? "present" : "starting"}>
             <div className="box">
               {resultsToArray(0, 0, slots).map((item, i) => (
@@ -506,9 +523,11 @@ const Game = () => {
         )}
       </main>
       {hasWon ? (
-        <div>
-          Solved in {turn} turn{turn > 1 ? "s." : "."}
+        <div className="winning-message">
+          Solved in {turn} turn{turn > 1 ? "s." : ". Congrats!"}
         </div>
+      ) : turnstolose - turn === 0 ? (
+        <div className="losing-message"> Try Again! </div>
       ) : (
         <footer>
           <div className="color-buttons">{generateButtons()}</div>

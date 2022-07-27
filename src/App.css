@@ -75,6 +75,8 @@ header {
 
 .turns-message {
     grid-area: hd;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -96,6 +98,20 @@ footer {
 }
 .submit {
     grid-area: fb;
+}
+
+.winning-message {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.losing-message {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-left: 1rem;
 }
 
 main {
