@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Stack, Switch, FormControlLabel } from '@mui/material';
+import { Stack, Switch, FormControlLabel, Slider, MuiInput, Typography, Grid, Box } from "@mui/material";
+
 import "./App.css";
 //Hit and Blow
 //DONE - set number of colors
@@ -56,14 +57,13 @@ const generateSequence = (colors, slots) => {
 const nonDupeSeq = (colors, slots) => {
   let seq = [];
   let temp = [...colors];
-  for (let i=0;i<slots;i++) {
-    let index = Math.floor(Math.random()*temp.length);
+  for (let i = 0; i < slots; i++) {
+    let index = Math.floor(Math.random() * temp.length);
     seq.push(temp[index]);
     temp.splice(index, 1);
   }
   return seq;
-}
-
+};
 
 //function that checks hits and blows.. returns a list in the form of [hits, blows]
 //hits indicate a correct colors at the correct position
@@ -158,14 +158,19 @@ const Game = () => {
   const [userseq, setUserSeq] = useState(blanks(slots)); //list of user inputted sequence
   const [newgame, setNewGame] = useState(false);
   const [turn, setTurn] = useState(0);
+  const [turnstolose, setTurnsToLose] = useState(6);
   const [submit, setSubmit] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [hasLost, setHasLost] = useState(false);
   const [hasdupe, setHasDupe] = useState(true);
 
   // progressive after turn > 0
   const [history, setHistory] = useState([]);
   const [results, setResults] = useState([]);
   const [score, setScore] = useState([]);
+
+  // for MUI
+  const [ncolors, setNColors] = useState(6);
 
   let hits = scoreChecker(seq, userseq)[0];
   let blows = scoreChecker(seq, userseq)[1];
@@ -197,7 +202,6 @@ const Game = () => {
     setResults(temp);
   };
 
-
   useEffect(() => {
     updateHistory();
     updateResults();
@@ -210,7 +214,7 @@ const Game = () => {
 
   //new game reverts to initial conditions
   // changing any header inputs reverts to ICs
-  useEffect(() => { 
+  useEffect(() => {
     setUserSeq(blanks(slots));
     setNewGame(false);
     setTurn(0);
@@ -218,8 +222,15 @@ const Game = () => {
     setResults([]);
     setScore([]);
     setHasWon(false);
-    return hasdupe ? setSeq(generateSequence(colors, slots)) : setSeq(nonDupeSeq(colors,slots));
-  }, [newgame, colors, slots, hasdupe]); 
+    return hasdupe
+      ? setSeq(generateSequence(colors, slots))
+      : setSeq(nonDupeSeq(colors, slots));
+  }, [newgame, colors, slots, hasdupe, turnstolose]);
+
+  //for MUI sliders
+  useEffect(() => {
+    setColors(generateColor(ncolors));
+  }, [ncolors]);
 
   //function that returns buttons of colors available
   const generateButtons = () => {
@@ -249,59 +260,132 @@ const Game = () => {
     let buttons = [];
     for (let i = 0; i < userseq.length; i++) {
       buttons.push(
-          <button
-            className={userseq[i] === "" ? "empty" + " " + "circle" : userseq[i] + " " + "circle"}
-            onClick={() =>
-              userseq[i] === "" ? null : setUserSeq(empty(userseq, i))
-            }
-            key={i}
-          >
-            {userseq[i] === "" ? "empty" : userseq[i]}
-          </button>
+        <button
+          className={
+            userseq[i] === ""
+              ? "empty" + " " + "circle"
+              : userseq[i] + " " + "circle"
+          }
+          onClick={() =>
+            userseq[i] === "" ? null : setUserSeq(empty(userseq, i))
+          }
+          key={i}
+        >
+          {userseq[i] === "" ? "empty" : userseq[i]}
+        </button>
       );
     }
     return buttons;
   };
 
+  //MUI event handlers and stylers
+
+  // for color slider
+  const handleColors = (event, newValue) => {
+    setNColors(newValue);
+  };
+
+  const handleTTL = (event, newValue) => {
+    setTurnsToLose(newValue);
+  };
+  const handleSlots = (event, newValue) => {
+    return hasdupe
+      ? setSlots(newValue)
+      : newValue > colors.length
+      ? null    // do something here to indicate that colors must be changed or whatever
+      : setSlots(newValue);
+  };
+
   return (
     <>
       <header>
-        <div>sequence {seq} dupes? {hasdupe ? "yes" : "no"}</div>
+        <FormControlLabel
+          labelPlacement="start"
+          label="Allow Duplicates"
+          control={
+            <Switch
+              defaultChecked
+              onChange={() => (hasdupe ? setHasDupe(false) : setHasDupe(true))}
+            />
+          }
+        />
         <div>
-          <span># of colors: </span>
+          sequence {seq} dupes? {hasdupe ? "yes" : "no"}
+        </div>
+        <Box>
+          <Typography id="color-slider" gutterBottom>
+          Number of Colors
+          </Typography>
+        <Grid container spacing={2} alignItems="start">
+         <Grid item xs> 
+            <Slider
+              value={ncolors}
+              aria-label="colors"
+              defaultValue={6}
+              valueLabelDisplay="auto"
+              min={1}
+              marks
+              max={10}
+              onChange={handleColors}
+            />
+          </Grid>
+          <Grid item>
+            <Input
+              value = {ncolors}
+              size="small"
+              onChange={handleColors}
+            />
+          </Grid>
+        </Grid>
+        <div>
+          <span># of turns: </span>
+          <Slider
+            value={turnstolose}
+            aria-label="turnstolose"
+            defaultValue={6}
+            valueLabelDisplay="auto"
+            min={1}
+            marks
+            max={10}
+            onChange={handleTTL}
+          />
           <input
             type="text"
             size="1"
             maxLength="1"
-            value={colors.length || ""}
+            value={turnstolose || ""}
             onChange={(e) => {
-              setColors(generateColor(parseInt(e.target.value)));
+              setTurnsToLose(e.target.value);
             }}
           />
         </div>
         <div>
           <span># of slots: </span>
+          <Slider
+            value={slots}
+            aria-label="turnstolose"
+            defaultValue={6}
+            valueLabelDisplay="auto"
+            min={1}
+            marks
+            max={hasdupe ? 10 : slots > colors.length ? null : slots} // do something here
+            onChange={handleSlots}
+          />
           <input
             type="text"
             size="1"
             maxLength="1"
             value={slots || ""}
             onChange={(e) => {
-              setSlots(parseInt(e.target.value));
+              return hasdupe
+                ? setSlots(parseInt(e.target.value))
+                : parseInt(e.target.value) > colors.length
+                ? null
+                : setSlots(parseInt(e.target.value)); //*maybe write a message that says either decrease #slots or increase #colors
             }}
           />
-        </div>
+          </Box>
         <button onClick={() => setNewGame(true)}>New Game</button>
-        <FormControlLabel
-          
-          labelPlacement="start"
-          label="Allow Duplicates"
-          control={
-            <Switch
-              defaultChecked
-              onChange={() => hasdupe ? setHasDupe(false) : setHasDupe(true)}
-          />}
-        />
       </header>
       <main className="game-board">
         {/* <div>hidden sequence is: {seq}</div>
@@ -316,12 +400,13 @@ const Game = () => {
                 </span>
               ))}
             </div> */}
-            <Stack className="boxes"
-              direction = "row"
+            <Stack
+              className="boxes"
+              direction="row"
               // sx={{ justify-content: "center"}}
               // justifyContent="center"
               // spacing={2}
-              >
+            >
               {results.map((array, i) => (
                 <div className="box" key={i}>
                   {array.map((item, j) => (
@@ -332,11 +417,12 @@ const Game = () => {
                 </div>
               ))}
             </Stack>
-            <Stack className="columns"
-              direction= "row"
+            <Stack
+              className="columns"
+              direction="row"
               // divider={<Divider orientation="vertical" flexItem />}
               // spacing={3}
-              >
+            >
               {history.map((array, i) => (
                 <div className="column" key={i}>
                   {array.map((item, j) => (
@@ -378,6 +464,24 @@ const Game = () => {
           >
             Submit
           </button>
+        </footer>
+      )}
+
+      {turnstolose === turn ? (
+        <div>you lose</div>
+      ) : (
+        <footer>
+          <div>{generateButtons()}</div>
+          <button
+            onClick={() =>
+              userseq.includes("")
+                ? null
+                : setSubmit(submit === false ? true : false)
+            }
+          >
+            Submit
+          </button>
+          <div> {turnstolose - turn} turns left</div>
         </footer>
       )}
     </>
