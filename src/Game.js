@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack } from '@mui/material';
+import { Stack, Switch, FormControlLabel } from '@mui/material';
 import "./App.css";
 //Hit and Blow
 //DONE - set number of colors
@@ -52,6 +52,19 @@ const generateSequence = (colors, slots) => {
   return seq;
 };
 
+//generates random string of uniqe colors
+const nonDupeSeq = (colors, slots) => {
+  let seq = [];
+  let temp = [...colors];
+  for (let i=0;i<slots;i++) {
+    let index = Math.floor(Math.random()*temp.length);
+    seq.push(temp[index]);
+    temp.splice(index, 1);
+  }
+  return seq;
+}
+
+
 //function that checks hits and blows.. returns a list in the form of [hits, blows]
 //hits indicate a correct colors at the correct position
 //blows indicate a color present in the sequence
@@ -79,30 +92,6 @@ const scoreChecker = (seq, userseq) => {
   }
   return [hits, blows];
 };
-
-//*maybe separate button from functionality ===> focus on functionality of what happens after onClick
-//logs the user sequence array
-//logs hits: x blows: y array [x, y]
-//make a useEffect to check if has won *do later
-
-// onclick outputs user sequence and hits
-// make the divs in the output clasifiable somehow (gap in knowledge)
-
-// const submitResults = (userseq, hits, blows) => {
-//   let results = [];
-//   results.push(
-//     <div className="history">
-//       <div className="score">Hits: {hits} Blows: {blows}</div>
-//       {userseq.map((item, i) => (
-//         <div key={i} className={userseq[i]}>
-//           {userseq[i]}
-//         </div>
-//       ))}
-//     </div>
-//   );
-//   console.log(results);
-//   return results;
-// };
 
 //function generates a list of blanks (used to create default list for user sequence rendering)
 const blanks = (num) => {
@@ -171,6 +160,7 @@ const Game = () => {
   const [turn, setTurn] = useState(0);
   const [submit, setSubmit] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [hasdupe, setHasDupe] = useState(true);
 
   // progressive after turn > 0
   const [history, setHistory] = useState([]);
@@ -207,6 +197,7 @@ const Game = () => {
     setResults(temp);
   };
 
+
   useEffect(() => {
     updateHistory();
     updateResults();
@@ -219,8 +210,7 @@ const Game = () => {
 
   //new game reverts to initial conditions
   // changing any header inputs reverts to ICs
-  useEffect(() => {
-    setSeq(generateSequence(colors, slots));
+  useEffect(() => { 
     setUserSeq(blanks(slots));
     setNewGame(false);
     setTurn(0);
@@ -228,7 +218,8 @@ const Game = () => {
     setResults([]);
     setScore([]);
     setHasWon(false);
-  }, [newgame, colors, slots]); 
+    return hasdupe ? setSeq(generateSequence(colors, slots)) : setSeq(nonDupeSeq(colors,slots));
+  }, [newgame, colors, slots, hasdupe]); 
 
   //function that returns buttons of colors available
   const generateButtons = () => {
@@ -275,6 +266,7 @@ const Game = () => {
   return (
     <>
       <header>
+        <div>sequence {seq} dupes? {hasdupe ? "yes" : "no"}</div>
         <div>
           <span># of colors: </span>
           <input
@@ -300,6 +292,15 @@ const Game = () => {
           />
         </div>
         <button onClick={() => setNewGame(true)}>New Game</button>
+        <FormControlLabel
+          control={
+            <Switch
+              defaultChecked
+              onChange={() => hasdupe ? setHasDupe(false) : setHasDupe(true)}
+          label="AllowDuplicates"
+          labelPlacement="top"
+          />}
+        />
       </header>
       <main className="game-board">
         {/* <div>hidden sequence is: {seq}</div>
@@ -332,6 +333,7 @@ const Game = () => {
             </Stack>
             <Stack className="columns"
               direction= "row"
+              // divider={<Divider orientation="vertical" flexItem />}
               // spacing={3}
               >
               {history.map((array, i) => (

@@ -45,7 +45,10 @@
 
 /* enables present to pivot beside history */
 
-
+header {
+    display: grid;
+    justify-content: center;
+}
 
 main {
     display:flex; 
