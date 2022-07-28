@@ -9,7 +9,7 @@ import {
   Grid,
   Box,
   Button,
-  Divider, Chip
+  Divider
 } from "@mui/material";
 
 import "./App.css";
@@ -129,11 +129,7 @@ const replace = (userseq, color) => {
     temp.splice(temp.indexOf(""), 1, color);
     return temp;
   } 
-  // else if (temp.includes("clicked")) {
-  //   temp.splice(temp.indexOf("clicked"), 1, color);
-  //   return temp;
-  // } 
-  return temp; //might not be good, as it outputs the unchanged list, meaning a re render happens... done to make code more readable
+  return temp; 
 };
 
 //function that replaces a colored button with an empty sting ""
@@ -143,6 +139,7 @@ const empty = (userseq, i) => {
   temp.splice(i, 1, "");
   return temp;
 };
+
 //function that replaces an empty "" button with a "clicked" button
 const clicked = (userseq, i) => {
   //splice the index, 1 item, ""
@@ -179,7 +176,6 @@ const resultsToArray = (hits, blows, slots) => {
 
 const Game = () => {
   // initializing
-
   const [colors, setColors] = useState(generateColor(6));
   const [slots, setSlots] = useState(4);
   const [seq, setSeq] = useState(generateSequence(colors, slots));
@@ -199,6 +195,7 @@ const Game = () => {
   // for MUI
   const [ncolors, setNColors] = useState(6);
 
+  //vars for functions
   let hits = scoreChecker(seq, userseq)[0];
   let blows = scoreChecker(seq, userseq)[1];
 
@@ -214,8 +211,6 @@ const Game = () => {
     let temp = [...history];
     // temp.push([]);
     temp.push(userseq);
-    console.log("historic user inputs: ");
-    console.log(temp); //*testing
     setHistory(temp);
   };
 
@@ -224,19 +219,16 @@ const Game = () => {
     let temp = [...results];
     // temp.push([]);
     temp.push(resultsToArray(hits, blows, slots));
-    console.log("historic results: ");
-    console.log(temp); // *testing
     setResults(temp);
   };
 
-  //testing
-  console.log(seq);
 
 
   //for error with slots and colors
   useEffect(() => {
     // return (slots > colors.length ? setSlots(ncolors) : null);
     if ((slots > ncolors && !hasdupe) ? setSlots(ncolors) : null);
+        // eslint-disable-next-line
   }, [ncolors, hasdupe])
 
   useEffect(() => {
@@ -520,29 +512,16 @@ const Game = () => {
         }
       </header>
       <main className="game-board">
-        {/* <div>hidden sequence is: {seq}</div>
-        <div>user sequence is: {userseq} </div> */}
-        {/* *testing remember to remove */}
         {turn > 0 ? (
           <div className="history">
-            {/* <div className="score">
-              {score.map((item, i) => (
-                <span key={i}>
-                  Hits: {item[0]} Blows: {item[1]}
-                </span>
-              ))}
-            </div> */}
             <Stack
               className="boxes"
               direction="row"
-              // sx={{ justify-content: "center"}}
-              // justifyContent="center"
-              // spacing={2}
             >
               {results.map((array, i) => (
                 <div className="box" key={i}>
                   {array.map((item, j) => (
-                    <div className={item + " " + "small-circle"} key={j}>
+                    <div className={item + " small-circle"} key={j}>
                       {item}
                     </div>
                   ))}
@@ -552,13 +531,11 @@ const Game = () => {
             <Stack
               className="columns"
               direction="row"
-              // divider={<Divider orientation="vertical" flexItem />}
-              // spacing={3}
             >
               {history.map((array, i) => (
                 <div className="column" key={i}>
                   {array.map((item, j) => (
-                    <div className={item + " " + "circle"} key={j}>
+                    <div className={item + " circle"} key={j}>
                       {item}
                     </div>
                   ))}
@@ -571,7 +548,7 @@ const Game = () => {
           <div className={turn > 0 ? "present" : "starting"}>
             <div className="box">
               {resultsToArray(0, 0, slots).map((item, i) => (
-                <div key={i} className={item + " " + "small-circle"}>
+                <div key={i} className={item + " small-circle"}>
                   {item}
                 </div>
               ))}
@@ -591,7 +568,7 @@ const Game = () => {
           <div className = "answer">
             <div className="box">
             {resultsToArray(0, 0, slots).map((item, i) => (
-                <div key={i} className={item + " " + "small-circle"}>
+                <div key={i} className={item + " small-circle"}>
                   {item}
                 </div>
               ))}
