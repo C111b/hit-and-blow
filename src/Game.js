@@ -215,13 +215,20 @@ const Game = () => {
   //testing
   console.log(seq);
 
+
+  //for error with slots and colors
+  useEffect(() => {
+    // return (slots > colors.length ? setSlots(ncolors) : null);
+    if ((slots > ncolors && !hasdupe) ? setSlots(ncolors) : null);
+  }, [ncolors, hasdupe])
+
   useEffect(() => {
     updateHistory();
     updateResults();
     updateScore();
     setTurn((turn) => turn + 1);
     setUserSeq(blanks(slots));
-    if (hits === 4 ? setHasWon(true) : null);
+    if (hits === slots ? setHasWon(true) : null);
     // eslint-disable-next-line
   }, [submit]); //above comment removes dependency yelling
 
@@ -319,7 +326,7 @@ const Game = () => {
   };
 
   const handleInputSlots = (e) => {
-    setNColors(e.target.value === "" ? "" : Number(e.target.value));
+    setSlots(e.target.value === "" ? "" : Number(e.target.value));
   };
 
   return (
@@ -414,7 +421,7 @@ const Game = () => {
                   valueLabelDisplay="auto"
                   min={1}
                   marks
-                  max={colors.length} // do something here
+                  max={!hasdupe ? colors.length : 12} // do something here
                   onChange={handleSliderSlots}
                 />
               </Grid>
@@ -427,7 +434,7 @@ const Game = () => {
                   inputProps={{
                     step: 1,
                     min: 1,
-                    max: colors.length,
+                    max: !hasdupe ? colors.length : 12,
                     type: "number",
                     "aria-labelledby": "slots-slider",
                   }}

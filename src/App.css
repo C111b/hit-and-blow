@@ -85,7 +85,7 @@ footer {
     justify-items:center;
     grid-auto-rows: minmax(2rem, auto);
     /* grid-auto-rows: 1fr 1fr 1fr; */
-    grid-template-columns:  1fr 1fr 1fr;
+    grid-template-columns:  1fr 2fr 1fr;
 
     grid-template-areas:
     ". . ."
