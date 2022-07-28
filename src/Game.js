@@ -9,6 +9,7 @@ import {
   Grid,
   Box,
   Button,
+  Divider, Chip
 } from "@mui/material";
 
 import "./App.css";
@@ -482,7 +483,35 @@ const Game = () => {
           New Game
         </Button>
         { turnstolose - turn !== 0 && !hasWon ? 
-          (<div className="turns-message"> {turnstolose - turn} Turn{turnstolose - turn === 1 ? " left." : "s left."}</div>) : null
+          <Divider 
+          textAlign="center"
+          className="turns-message">
+            <Typography
+              sx={{
+                display: "flex",
+                pb: 0,
+                mt: 3
+              }}
+          >{turnstolose - turn} Turn{turnstolose - turn === 1 ? " left." : "s left."}</Typography></Divider> 
+          : !hasWon ? <Divider 
+          textAlign="center"
+          className="turns-message">
+            <Typography
+              sx={{
+                display: "flex",
+                pb: 0,
+                mt: 3
+              }}
+          >You Lost.</Typography></Divider> : <Divider 
+          textAlign="center"
+          className="turns-message">
+            <Typography
+              sx={{
+                display: "flex",
+                pb: 0,
+                mt: 3
+              }}
+          >You Won.</Typography></Divider>
         }
       </header>
       <main className="game-board">
