@@ -25,6 +25,8 @@ import "./App.css";
 //DONE - maybe make a turn count, to show you won in x turns
 //DONE - function that filters duplicates in sequence (extend for later) with material ui switch
 //DONE- functionality for setting #of turns to finish
+//DONE - functionality for choosing which empty slot to add color to
+// - functionality for showing answer after finish -> add a transition animation
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
 //DONE haswon state -> triggers after submission button detects 4 hits
@@ -274,7 +276,7 @@ const Game = () => {
       //output buttons with the color name
       buttons.push(
         <button
-          className={colors[i] + " " + "circle"}
+          className={colors[i] + " circle"}
           //on click set that button's color to repplace a blank "" element of userseq
           onClick={() =>
             userseq.includes("")
@@ -299,10 +301,10 @@ const Game = () => {
         <button
           className={
             userseq[i] === ""
-              ? "empty" + " " + "circle"
+              ? "empty circle"
               : userseq[i] === "clicked" 
-              ? "clicked" + " " + "circle"
-              : userseq[i] + " " + "circle"
+              ? "clicked circle"
+              : userseq[i] + " circle"
           }
           onClick={() =>
             userseq[i] === "" ? setUserSeq(clicked(userseq, i)) : setUserSeq(empty(userseq, i))
@@ -315,6 +317,22 @@ const Game = () => {
     }
     return buttons;
   };
+
+  //allows hidden sequence to be visualized
+  const revealSeq = (seq) => {
+    let temp = []
+    for (let i = 0; i < seq.length; i++) {
+      temp.push(
+        <div
+          className={
+            seq[i] + " circle" 
+          }
+          key={i}
+        >seq[i]</div>
+      )
+    }
+    return temp;
+  }
 
   //MUI event handlers and stylers
 
@@ -457,19 +475,6 @@ const Game = () => {
                     "aria-labelledby": "slots-slider",
                   }}
                 />
-                {/* <input
-              type="text"
-              size="1"
-              maxLength="1"
-              value={slots || ""}
-              onChange={(e) => {
-                return hasdupe
-                  ? setSlots(parseInt(e.target.value))
-                  : parseInt(e.target.value) > colors.length
-                  ? null
-                  : setSlots(parseInt(e.target.value)); //*maybe write a message that says either decrease #slots or increase #colors
-              }}
-            /> */}
               </Grid>
             </Grid>
           </Box>
@@ -574,7 +579,26 @@ const Game = () => {
             <div className="column user-buttons">{userButtons()}</div>
           </div>
         )}
+
+      {/* Allows answer to be shown after game ends */}
+        { hasWon || turnstolose - turn === 0 ? (
+          <Divider 
+          sx={{ ml: 3 }}
+          orientation="vertical" flexItem>
+          </Divider>
+        ) : null}
+        {hasWon || turnstolose - turn === 0 ? (
+          <div className = "answer">
+            <div className="column">
+            {revealSeq(seq)}
+            </div>
+          </div>
+        ) : null}
       </main>
+
+      {/* Displays user color choice + submission interface 
+      - when game is won, displays winning message
+      - when game is lost, displays losing message */}
       {hasWon ? (
         <div className="winning-message">
           Solved in {turn} turn{turn > 1 ? "s." : ". Congrats!"}
@@ -599,24 +623,6 @@ const Game = () => {
           </Button>
         </footer>
       )}
-
-      {/* {turnstolose === turn ? (
-        <div>you lose</div>
-      ) : (
-        <footer>
-          <div>{generateButtons()}</div>
-          <button
-            onClick={() =>
-              userseq.includes("")
-                ? null
-                : setSubmit(submit === false ? true : false)
-            }
-          >
-            Submit
-          </button>
-          <div> {turnstolose - turn} turns left</div>
-        </footer>
-      )} */}
     </>
   );
 };

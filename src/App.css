@@ -97,6 +97,13 @@ header {
     grid-template-rows: .25fr 3fr 1fr 2fr
 } */
 
+/* segregates answer column, aligns it to the history */
+.answer {
+    margin-top: 4rem;
+    margin-left: 2rem;
+}
+
+
 footer {
     display: grid;
     justify-items:center;
