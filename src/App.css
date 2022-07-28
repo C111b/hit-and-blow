@@ -99,7 +99,6 @@ header {
 
 /* segregates answer column, aligns it to the history */
 .answer {
-    margin-top: 4rem;
     margin-left: 2rem;
 }
 
@@ -289,3 +288,7 @@ button {
 /* .empty {
     background-color: hsla(0, 0%, 0%, 0.452);
 } */
+.answer .box .none{
+    background-color: rgba(255, 255, 255, 0);
+    border-color: rgba(255, 255, 255, 0);
+}

@@ -26,7 +26,7 @@ import "./App.css";
 //DONE - function that filters duplicates in sequence (extend for later) with material ui switch
 //DONE- functionality for setting #of turns to finish
 //DONE - functionality for choosing which empty slot to add color to
-// - functionality for showing answer after finish -> add a transition animation
+//DONE - functionality for showing answer after finish -> add a transition animation
 
 //DONE - state for an array of aggregate results in the format Hits: x Blows: x
 //DONE haswon state -> triggers after submission button detects 4 hits
@@ -589,6 +589,13 @@ const Game = () => {
         ) : null}
         {hasWon || turnstolose - turn === 0 ? (
           <div className = "answer">
+            <div className="box">
+            {resultsToArray(0, 0, slots).map((item, i) => (
+                <div key={i} className={item + " " + "small-circle"}>
+                  {item}
+                </div>
+              ))}
+            </div>
             <div className="column">
             {revealSeq(seq)}
             </div>
