@@ -112,17 +112,24 @@ const blanks = (num) => {
   return list;
 };
 
-//replaces an empty string with color
+//replaces an empty or clicked string with color
 const replace = (userseq, color) => {
   //first check if userseq includes ""
   //if it does then get index of ""
   //then splice that index, with 1 element, with the color
   // return userseq.includes("") ? userseq.splice(userseq.indexOf(""), 1, color) : null
   let temp = [...userseq];
-  if (temp.includes("")) {
+  if (temp.includes("clicked")) {
+    temp.splice(temp.indexOf("clicked"), 1, color);
+    return temp;
+  } else if (temp.includes("")) {
     temp.splice(temp.indexOf(""), 1, color);
     return temp;
-  }
+  } 
+  // else if (temp.includes("clicked")) {
+  //   temp.splice(temp.indexOf("clicked"), 1, color);
+  //   return temp;
+  // } 
   return temp; //might not be good, as it outputs the unchanged list, meaning a re render happens... done to make code more readable
 };
 
@@ -131,6 +138,13 @@ const empty = (userseq, i) => {
   //splice the index, 1 item, ""
   let temp = [...userseq];
   temp.splice(i, 1, "");
+  return temp;
+};
+//function that replaces an empty "" button with a "clicked" button
+const clicked = (userseq, i) => {
+  //splice the index, 1 item, ""
+  let temp = [...userseq];
+  temp.splice(i, 1, "clicked");
   return temp;
 };
 
@@ -264,7 +278,8 @@ const Game = () => {
           onClick={() =>
             userseq.includes("")
               ? setUserSeq(replace(userseq, colors[i]))
-              : null
+              : userseq.includes("clicked") 
+              ? setUserSeq(replace(userseq, colors[i])) : null
           }
           key={i}
         >
@@ -284,16 +299,16 @@ const Game = () => {
           className={
             userseq[i] === ""
               ? "empty" + " " + "circle"
-              // : userseq[i] === "clicked" 
+              : userseq[i] === "clicked" 
               ? "clicked" + " " + "circle"
               : userseq[i] + " " + "circle"
           }
           onClick={() =>
-            userseq[i] === "" ? null : setUserSeq(empty(userseq, i))
+            userseq[i] === "" ? setUserSeq(clicked(userseq, i)) : setUserSeq(empty(userseq, i))
           }
           key={i}
         >
-          {userseq[i] === "" ? "empty" : userseq[i]}
+          {userseq[i] === "" ? "empty" : userseq[i] === "clicked" ? clicked : userseq[i]}
         </button>
       );
     }
