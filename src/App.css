@@ -174,44 +174,82 @@ button {
     border-style: double;
 }
 .empty {
-    background-color: rgb(202, 202, 202);
+    background-color: hsl(0, 0%, 79%);
     border-color: rgb(202, 202, 202);
     border-style: double;
+}
+.empty:hover, .clicked {
+    background-color: hsl(0, 0%, 65%);
 }
 .blue {
     background-color: hsl(220, 100%, 50%, .9);
     border-color: hsl(220, 100%, 50%);
 }
+.color-buttons .blue:hover, .user-buttons .blue:hover {
+    background-color: hsl(220, 100%, 45%, .9);
+}
 .red {
     background-color:hsl(-10, 100%, 50%, .9);
+    border-color:hsl(-10, 100%, 50%);
+}
+.color-buttons .red:hover, .user-buttons .red:hover {
+    background-color:hsl(-10, 100%, 45%, .9);
     border-color:hsl(-10, 100%, 50%);
 }
 .green {
     background-color: hsl(100, 100%, 25%, .9);
     border-color: hsl(100, 100%, 25%);
 }
+.color-buttons .green:hover, .user-buttons .green:hover {
+    background-color: hsl(100, 100%, 20%, .9);
+    border-color: hsl(100, 100%, 25%);
+}
 .yellow {
     background-color: hsl(50, 100%, 50%, .9);
+    border-color: hsl(50, 100%, 50%);
+}
+.color-buttons .yellow:hover, .user-buttons .yellow:hover {
+    background-color: hsl(50, 100%, 45%, .9);
     border-color: hsl(50, 100%, 50%);
 }
 .purple {
     background-color: hsl(290, 58%, 46%, .9);
     border-color: hsl(290, 58%, 46%);
 }
+.color-buttons .purple:hover, .user-buttons .purple:hover {
+    background-color: hsl(290, 58%, 41%, .9);
+    border-color: hsl(290, 58%, 46%);
+}
 .white {
     background-color: hsl(0, 0%, 100%, .9);
+    border-color: hsl(0, 0%, 70%);
+}
+.color-buttons .white:hover, .user-buttons .white:hover {
+    background-color: hsl(0, 0%, 95%, .9);
     border-color: hsl(0, 0%, 70%);
 }
 .orange {
     background-color: hsl(25, 100%, 50%, .9);
     border-color: hsl(25, 100%, 50%);
 }
+.color-buttons .orange:hover, .user-buttons .orange:hover {
+    background-color: hsl(25, 100%, 45%, .9);
+    border-color: hsl(25, 100%, 50%);
+}
 .grey {
     background-color: hsl(30, 0%, 50%, .9);
     border-color: hsl(30, 0%, 50%);
 }
+.color-buttons .grey:hover, .user-buttons .grey:hover {
+    background-color: hsl(30, 0%, 45%, .9);
+    border-color: hsl(30, 0%, 50%);
+}
 .brown {
     background-color: hsl(20, 59%, 41%, .9);
+    border-color: hsl(20, 59%, 41%);
+}
+.color-buttons .brown:hover, .user-buttons .brown:hover {
+    background-color: hsl(20, 59%, 36%, .9);
     border-color: hsl(20, 59%, 41%);
 }
 /* .empty {

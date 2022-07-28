@@ -284,6 +284,8 @@ const Game = () => {
           className={
             userseq[i] === ""
               ? "empty" + " " + "circle"
+              // : userseq[i] === "clicked" 
+              ? "clicked" + " " + "circle"
               : userseq[i] + " " + "circle"
           }
           onClick={() =>
@@ -321,7 +323,7 @@ const Game = () => {
     return hasdupe
       ? setSlots(newValue)
       : newValue > colors.length
-      ? null // do something here to indicate that colors must be changed or whatever
+      ? null 
       : setSlots(newValue);
   };
 
@@ -525,7 +527,7 @@ const Game = () => {
                 </div>
               ))}
             </div>
-            <div className="column">{userButtons()}</div>
+            <div className="column user-buttons">{userButtons()}</div>
           </div>
         )}
       </main>
