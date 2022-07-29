@@ -10,6 +10,9 @@
     justify-content: flex-start;
 } */
 
+/* :root {
+    background-color: black;
+} */
 
 
 .box {
@@ -57,16 +60,21 @@
 /* getting the general shape of orientation */
 
 /* enables present to pivot beside history */
-
 header {
+    display: flex;
+    justify-content:center;
+    /* width: "2rem"; */
+}
+
+.header-content {
     display: grid;
     justify-content: center;
 
-    grid-template-columns: 5.5fr 3fr 1fr 2fr 5.5fr;
+    grid-template-columns: 1.5fr 3fr 2fr 3fr 1.5fr;
     grid-auto-rows: minmax(3rem, auto);
 
     grid-template-areas:
-    ". . . . ."
+    /* ". . . . ." */
     ". ha .  hb ."
     ". ha . . . "
     ". ha . hc . "
@@ -97,6 +105,9 @@ header {
     grid-template-rows: .25fr 3fr 1fr 2fr
 } */
 
+
+
+
 /* segregates answer column, aligns it to the history */
 .answer {
     margin-left: 2rem;
@@ -104,14 +115,20 @@ header {
 
 
 footer {
+    display: flex;
+    justify-content:center;
+    /* width: "2rem"; */
+}
+
+.footer-content {
     display: grid;
     justify-items:center;
     grid-auto-rows: minmax(1rem, auto);
     /* grid-auto-rows: 1fr 1fr 1fr; */
-    grid-template-columns:  1fr 2fr 1fr;
+    grid-template-columns:  2rem auto 2rem;
 
     grid-template-areas:
-    ". . ."
+    /* ". . ." */
     ". fa ."
     ". . ."
     ". fb .";
@@ -254,7 +271,7 @@ button {
     border-color: hsl(290, 58%, 46%);
 }
 .white {
-    background-color: hsl(0, 0%, 100%, .9);
+    background-color: hsl(0, 0%, 100%);
     border-color: hsl(0, 0%, 70%);
 }
 .color-buttons .white:hover, .user-buttons .white:hover {

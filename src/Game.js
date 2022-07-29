@@ -9,7 +9,8 @@ import {
   Grid,
   Box,
   Button,
-  Divider
+  Divider,
+  Paper,
 } from "@mui/material";
 
 import "./App.css";
@@ -128,8 +129,8 @@ const replace = (userseq, color) => {
   } else if (temp.includes("")) {
     temp.splice(temp.indexOf(""), 1, color);
     return temp;
-  } 
-  return temp; 
+  }
+  return temp;
 };
 
 //function that replaces a colored button with an empty sting ""
@@ -222,14 +223,12 @@ const Game = () => {
     setResults(temp);
   };
 
-
-
   //for error with slots and colors
   useEffect(() => {
     // return (slots > colors.length ? setSlots(ncolors) : null);
-    if ((slots > ncolors && !hasdupe) ? setSlots(ncolors) : null);
-        // eslint-disable-next-line
-  }, [ncolors, hasdupe])
+    if (slots > ncolors && !hasdupe ? setSlots(ncolors) : null);
+    // eslint-disable-next-line
+  }, [ncolors, hasdupe]);
 
   useEffect(() => {
     updateHistory();
@@ -273,8 +272,9 @@ const Game = () => {
           onClick={() =>
             userseq.includes("")
               ? setUserSeq(replace(userseq, colors[i]))
-              : userseq.includes("clicked") 
-              ? setUserSeq(replace(userseq, colors[i])) : null
+              : userseq.includes("clicked")
+              ? setUserSeq(replace(userseq, colors[i]))
+              : null
           }
           key={i}
         >
@@ -294,16 +294,22 @@ const Game = () => {
           className={
             userseq[i] === ""
               ? "empty circle"
-              : userseq[i] === "clicked" 
+              : userseq[i] === "clicked"
               ? "clicked circle"
               : userseq[i] + " circle"
           }
           onClick={() =>
-            userseq[i] === "" ? setUserSeq(clicked(userseq, i)) : setUserSeq(empty(userseq, i))
+            userseq[i] === ""
+              ? setUserSeq(clicked(userseq, i))
+              : setUserSeq(empty(userseq, i))
           }
           key={i}
         >
-          {userseq[i] === "" ? "empty" : userseq[i] === "clicked" ? clicked : userseq[i]}
+          {userseq[i] === ""
+            ? "empty"
+            : userseq[i] === "clicked"
+            ? clicked
+            : userseq[i]}
         </button>
       );
     }
@@ -312,19 +318,16 @@ const Game = () => {
 
   //allows hidden sequence to be visualized
   const revealSeq = (seq) => {
-    let temp = []
+    let temp = [];
     for (let i = 0; i < seq.length; i++) {
       temp.push(
-        <div
-          className={
-            seq[i] + " circle" 
-          }
-          key={i}
-        >seq[i]</div>
-      )
+        <div className={seq[i] + " circle"} key={i}>
+          seq[i]
+        </div>
+      );
     }
     return temp;
-  }
+  };
 
   //MUI event handlers and stylers
 
@@ -349,7 +352,7 @@ const Game = () => {
     return hasdupe
       ? setSlots(newValue)
       : newValue > colors.length
-      ? null 
+      ? null
       : setSlots(newValue);
   };
 
@@ -359,7 +362,16 @@ const Game = () => {
 
   return (
     <>
+    {/* <Paper> */}
       <header>
+        <Paper
+              sx={{
+                mt: 5,
+                p: 2,
+                // maxWidth: "50%"
+              }}
+            >
+        <div className="header-content">
         <FormControlLabel
           className="dupe"
           labelPlacement="start"
@@ -479,45 +491,51 @@ const Game = () => {
         >
           New Game
         </Button>
-        { turnstolose - turn !== 0 && !hasWon ? 
-          <Divider 
-          textAlign="center"
-          className="turns-message">
+        {turnstolose - turn !== 0 && !hasWon ? (
+          <Divider textAlign="center" className="turns-message">
             <Typography
               sx={{
                 display: "flex",
                 pb: 0,
-                mt: 3
+                mt: 3,
               }}
-          >{turnstolose - turn} Turn{turnstolose - turn === 1 ? " left." : "s left."}</Typography></Divider> 
-          : !hasWon ? <Divider 
-          textAlign="center"
-          className="turns-message">
+            >
+              {turnstolose - turn} Turn
+              {turnstolose - turn === 1 ? " left." : "s left."}
+            </Typography>
+          </Divider>
+        ) : !hasWon ? (
+          <Divider textAlign="center" className="turns-message">
             <Typography
               sx={{
                 display: "flex",
                 pb: 0,
-                mt: 3
+                mt: 3,
               }}
-          >You Lost.</Typography></Divider> : <Divider 
-          textAlign="center"
-          className="turns-message">
+            >
+              You Lost.
+            </Typography>
+          </Divider>
+        ) : (
+          <Divider textAlign="center" className="turns-message">
             <Typography
               sx={{
                 display: "flex",
                 pb: 0,
-                mt: 3
+                mt: 3,
               }}
-          >You Won.</Typography></Divider>
-        }
+            >
+              You Won.
+            </Typography>
+          </Divider>
+        )}
+        </div>
+        </Paper>
       </header>
       <main className="game-board">
         {turn > 0 ? (
           <div className="history">
-            <Stack
-              className="boxes"
-              direction="row"
-            >
+            <Stack className="boxes" direction="row">
               {results.map((array, i) => (
                 <div className="box" key={i}>
                   {array.map((item, j) => (
@@ -528,10 +546,7 @@ const Game = () => {
                 </div>
               ))}
             </Stack>
-            <Stack
-              className="columns"
-              direction="row"
-            >
+            <Stack className="columns" direction="row">
               {history.map((array, i) => (
                 <div className="column" key={i}>
                   {array.map((item, j) => (
@@ -557,25 +572,20 @@ const Game = () => {
           </div>
         )}
 
-      {/* Allows answer to be shown after game ends */}
-        { hasWon || turnstolose - turn === 0 ? (
-          <Divider 
-          sx={{ ml: 3 }}
-          orientation="vertical" flexItem>
-          </Divider>
+        {/* Allows answer to be shown after game ends */}
+        {hasWon || turnstolose - turn === 0 ? (
+          <Divider sx={{ ml: 3 }} orientation="vertical" flexItem></Divider>
         ) : null}
         {hasWon || turnstolose - turn === 0 ? (
-          <div className = "answer">
+          <div className="answer">
             <div className="box">
-            {resultsToArray(0, 0, slots).map((item, i) => (
+              {resultsToArray(0, 0, slots).map((item, i) => (
                 <div key={i} className={item + " small-circle"}>
                   {item}
                 </div>
               ))}
             </div>
-            <div className="column">
-            {revealSeq(seq)}
-            </div>
+            <div className="column">{revealSeq(seq)}</div>
           </div>
         ) : null}
       </main>
@@ -591,22 +601,33 @@ const Game = () => {
         <div className="losing-message"> Try Again! </div>
       ) : (
         <footer>
-          <div className="color-buttons">{generateButtons()}</div>
-          <Button
-            sx={{ width: 100 }}
-            size="large"
-            className="submit"
-            variant="contained"
-            onClick={() =>
-              userseq.includes("")
-                ? null
-                : setSubmit(submit === false ? true : false)
-            }
+          <Paper
+            variant="outlined"
+            sx={{
+              p: 2,
+              maxWidth: "38rem"
+            }}
           >
-            Submit
-          </Button>
+            <div className="footer-content">
+              <div className="color-buttons">{generateButtons()}</div>
+              <Button
+                sx={{ width: 100 }}
+                size="large"
+                className="submit"
+                variant="contained"
+                onClick={() =>
+                  userseq.includes("")
+                    ? null
+                    : setSubmit(submit === false ? true : false)
+                }
+              >
+                Submit
+              </Button>
+            </div>
+          </Paper>
         </footer>
       )}
+      {/* </Paper> */}
     </>
   );
 };
