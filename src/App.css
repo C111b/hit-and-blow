@@ -203,10 +203,16 @@ button {
 .hit {
     background-color: hsla(0, 100%, 56%, 0.61);
     border-color: hsl(0, 100%, 56%);
+    border-radius: 3rem;
+    outline: 1rem solid hsl(0, 100%, 56%);
+    outline-offset: -1.25rem;
 }
 .blow {
-    background-color: hsla(0, 9%, 98%, 0.801);
+    background-color: hsla(0, 0%, 100%, 0.966);
     border-color: hsla(0, 9%, 70%, 0.801);
+    border-radius: 3rem;
+    outline: 1rem solid hsla(0, 0%, 100%, 0.966);
+    outline-offset: -1.25rem;
 }
 
 /* coloring */

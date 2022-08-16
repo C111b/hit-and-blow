@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Stack,
   Switch,
@@ -11,9 +11,26 @@ import {
   Button,
   Divider,
   Paper,
+  useTheme,
+  AppBar,
+  IconButton,
+  Toolbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 
+//theming
+import { ColorModeContext } from "./ColorModeContextProvider.js";
+
+//icons
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
 import "./App.css";
+
 //Hit and Blow
 //DONE - set number of colors
 //DONE - set number of slots
@@ -188,6 +205,10 @@ const Game = () => {
   const [hasWon, setHasWon] = useState(false);
   const [hasdupe, setHasDupe] = useState(true);
 
+  //context
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+
   // progressive after turn > 0
   const [history, setHistory] = useState([]);
   const [results, setResults] = useState([]);
@@ -195,6 +216,8 @@ const Game = () => {
 
   // for MUI
   const [ncolors, setNColors] = useState(6);
+  // help
+  const [help, setHelp] = useState(true);
 
   //vars for functions
   let hits = scoreChecker(seq, userseq)[0];
@@ -360,176 +383,244 @@ const Game = () => {
     setSlots(e.target.value === "" ? "" : Number(e.target.value));
   };
 
+  // for opening help dialog
+  const handleHelp = () => {
+    return help ? setHelp(false) : setHelp(true);
+  }
+
   return (
     <>
-    {/* <Paper> */}
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+          <Typography color="inherit" component="div">
+            Hit and Blow
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton 
+          color="secondary"
+          onClick={handleHelp}
+          >
+            <HelpOutlineIcon />
+          </IconButton>
+          <Dialog 
+            open={help}
+            onClose={handleHelp}
+          >
+            <DialogTitle sx={{textAlign: "center"}}>How To Play</DialogTitle>
+            <DialogContent>
+              <DialogContentText sx={{
+                color: "text.primary",
+                textAlign: "center"}}>Guess the correct sequence of colors.
+                <Divider sx={{m:2}}></Divider> 
+                </DialogContentText>
+            <u>Information</u> <br />
+              Hits are indicated via red pin:  <br />
+              <span className="small-circle hit"></span> This occurs when the position of a colour matches the sequence. <br /> <br />
+              Blows are indicated via white pin: <br />
+              <span className="small-circle blow"></span> This occurs when a colour matches the sequence. <br /> <br />
+              The goal is to accumulate 4 Hits. <br />
+                <Box sx={{display: 'flex',
+                          flexWrap: 'wrap',
+                          maxWidth: 60,
+              }}>
+                  <span className="small-circle hit"></span>  <span className="small-circle hit"></span>
+                  <span className="small-circle hit"></span>  <span className="small-circle hit"></span>
+                </Box>
+            </DialogContent>
+          </Dialog>
+          <IconButton
+            sx={{ justifyContent: "flex-end", mr: 1 }}
+            color="secondary"
+            edge="end"
+            onClick={colorMode.toggleColorMode}
+          >
+            {theme.palette.mode === "dark" ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <header>
         <Paper
-              sx={{
-                mt: 5,
-                p: 2,
-                // maxWidth: "50%"
-              }}
-            >
-        <div className="header-content">
-        <FormControlLabel
-          className="dupe"
-          labelPlacement="start"
-          label="Duplicate Colors"
-          control={
-            <Switch
-              defaultChecked
-              onChange={() => (hasdupe ? setHasDupe(false) : setHasDupe(true))}
-            />
-          }
-        />
-        <div className="sliders">
-          <Box sx={{ width: 200 }}>
-            <Typography id="color-slider" gutterBottom>
-              # COLORS
-            </Typography>
-            <Grid container spacing={2} alignItems="start">
-              <Grid item xs>
-                <Slider
-                  value={typeof ncolors === "number" ? ncolors : 0}
-                  onChange={handleSliderColors}
-                  aria-labelledby="colors-slider"
-                  defaultValue={6}
-                  valueLabelDisplay="auto"
-                  min={1}
-                  marks
-                  max={9}
-                />
-              </Grid>
-              <Grid item>
-                <Input
-                  sx={{ width: 40 }}
-                  value={ncolors}
-                  size="small"
-                  onChange={handleInputColors}
-                  inputProps={{
-                    step: 1,
-                    min: 1,
-                    max: 9,
-                    type: "number",
-                    "aria-labelledby": "colors-slider",
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <Typography id="turns-slider" gutterBottom>
-              # TURNS
-            </Typography>
-            <Grid container spacing={2} alignItems="start">
-              <Grid item xs>
-                <Slider
-                  value={typeof turnstolose === "number" ? turnstolose : 0}
-                  onChange={handleSliderTTL}
-                  aria-labelledby="turns-slider"
-                  defaultValue={6}
-                  valueLabelDisplay="auto"
-                  min={1}
-                  marks
-                  max={20}
-                />
-              </Grid>
-              <Grid item>
-                <Input
-                  sx={{ width: 40 }}
-                  value={turnstolose}
-                  size="small"
-                  onChange={handleInputTTL}
-                  inputProps={{
-                    step: 1,
-                    min: 1,
-                    max: 20,
-                    type: "number",
-                    "aria-labelledby": "turns-slider",
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <Typography id="slots-slider" gutterBottom>
-              # SLOTS
-            </Typography>
-            <Grid container spacing={2} alignItems="start">
-              <Grid item xs>
-                <Slider
-                  value={slots}
-                  aria-labelledby="slots-slider"
-                  defaultValue={4}
-                  valueLabelDisplay="auto"
-                  min={1}
-                  marks
-                  max={!hasdupe ? colors.length : 12} // do something here
-                  onChange={handleSliderSlots}
-                />
-              </Grid>
-              <Grid item>
-                <Input
-                  sx={{ width: 40 }}
-                  value={slots}
-                  size="small"
-                  onChange={handleInputSlots}
-                  inputProps={{
-                    step: 1,
-                    min: 1,
-                    max: !hasdupe ? colors.length : 12,
-                    type: "number",
-                    "aria-labelledby": "slots-slider",
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </div>
-        <Button
-          size="medium"
-          className="new-game"
-          onClick={() => setNewGame(true)}
-          variant="contained"
+          sx={{
+            mt: 5,
+            p: 2,
+            // maxWidth: "50%"
+          }}
         >
-          New Game
-        </Button>
-        {turnstolose - turn !== 0 && !hasWon ? (
-          <Divider textAlign="center" className="turns-message">
-            <Typography
-              sx={{
-                display: "flex",
-                pb: 0,
-                mt: 3,
-              }}
+          <div className="header-content">
+            <FormControlLabel
+              className="dupe"
+              labelPlacement="start"
+              label="Duplicate Colors"
+              control={
+                <Switch
+                  color="secondary"
+                  defaultChecked
+                  onChange={() =>
+                    hasdupe ? setHasDupe(false) : setHasDupe(true)
+                  }
+                />
+              }
+            />
+            <div className="sliders">
+              <Box sx={{ width: 200 }}>
+                <Typography id="color-slider" gutterBottom>
+                  # COLORS
+                </Typography>
+                <Grid container spacing={2} alignItems="start">
+                  <Grid item xs>
+                    <Slider
+                  color="secondary"
+
+                      value={typeof ncolors === "number" ? ncolors : 0}
+                      onChange={handleSliderColors}
+                      aria-labelledby="colors-slider"
+                      defaultValue={6}
+                      valueLabelDisplay="auto"
+                      min={1}
+                      marks
+                      max={9}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Input
+                      sx={{ width: 40 }}
+                      value={ncolors}
+                      size="small"
+                      onChange={handleInputColors}
+                      inputProps={{
+                        step: 1,
+                        min: 1,
+                        max: 9,
+                        type: "number",
+                        "aria-labelledby": "colors-slider",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Typography id="turns-slider" gutterBottom>
+                  # TURNS
+                </Typography>
+                <Grid container spacing={2} alignItems="start">
+                  <Grid item xs>
+                    <Slider
+                  color="secondary"
+
+                      value={typeof turnstolose === "number" ? turnstolose : 0}
+                      onChange={handleSliderTTL}
+                      aria-labelledby="turns-slider"
+                      defaultValue={6}
+                      valueLabelDisplay="auto"
+                      min={1}
+                      marks
+                      max={20}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Input
+                      sx={{ width: 40 }}
+                      value={turnstolose}
+                      size="small"
+                      onChange={handleInputTTL}
+                      inputProps={{
+                        step: 1,
+                        min: 1,
+                        max: 20,
+                        type: "number",
+                        "aria-labelledby": "turns-slider",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                <Typography id="slots-slider" gutterBottom>
+                  # SLOTS
+                </Typography>
+                <Grid container spacing={2} alignItems="start">
+                  <Grid item xs>
+                    <Slider
+                  color="secondary"
+
+                      value={slots}
+                      aria-labelledby="slots-slider"
+                      defaultValue={4}
+                      valueLabelDisplay="auto"
+                      min={1}
+                      marks
+                      max={!hasdupe ? colors.length : 12} // do something here
+                      onChange={handleSliderSlots}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Input
+                      sx={{ width: 40 }}
+                      value={slots}
+                      size="small"
+                      onChange={handleInputSlots}
+                      inputProps={{
+                        step: 1,
+                        min: 1,
+                        max: !hasdupe ? colors.length : 12,
+                        type: "number",
+                        "aria-labelledby": "slots-slider",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </div>
+            <Button
+              size="medium"
+              className="new-game"
+              onClick={() => setNewGame(true)}
+              variant="contained"
+              color="secondary"
             >
-              {turnstolose - turn} Turn
-              {turnstolose - turn === 1 ? " left." : "s left."}
-            </Typography>
-          </Divider>
-        ) : !hasWon ? (
-          <Divider textAlign="center" className="turns-message">
-            <Typography
-              sx={{
-                display: "flex",
-                pb: 0,
-                mt: 3,
-              }}
-            >
-              You Lost.
-            </Typography>
-          </Divider>
-        ) : (
-          <Divider textAlign="center" className="turns-message">
-            <Typography
-              sx={{
-                display: "flex",
-                pb: 0,
-                mt: 3,
-              }}
-            >
-              You Won.
-            </Typography>
-          </Divider>
-        )}
-        </div>
+              New Game
+            </Button>
+            {turnstolose - turn !== 0 && !hasWon ? (
+              <Divider textAlign="center" className="turns-message">
+                <Typography
+                  sx={{
+                    display: "flex",
+                    pb: 0,
+                    mt: 3,
+                  }}
+                >
+                  {turnstolose - turn} Turn
+                  {turnstolose - turn === 1 ? " left." : "s left."}
+                </Typography>
+              </Divider>
+            ) : !hasWon ? (
+              <Divider textAlign="center" className="turns-message">
+                <Typography
+                  sx={{
+                    display: "flex",
+                    pb: 0,
+                    mt: 3,
+                  }}
+                >
+                  You Lost.
+                </Typography>
+              </Divider>
+            ) : (
+              <Divider textAlign="center" className="turns-message">
+                <Typography
+                  sx={{
+                    display: "flex",
+                    pb: 0,
+                    mt: 3,
+                  }}
+                >
+                  You Won.
+                </Typography>
+              </Divider>
+            )}
+          </div>
         </Paper>
       </header>
       <main className="game-board">
@@ -605,7 +696,7 @@ const Game = () => {
             variant="outlined"
             sx={{
               p: 2,
-              maxWidth: "38rem"
+              maxWidth: "38rem",
             }}
           >
             <div className="footer-content">
@@ -613,6 +704,7 @@ const Game = () => {
               <Button
                 sx={{ width: 100 }}
                 size="large"
+                color="secondary"
                 className="submit"
                 variant="contained"
                 onClick={() =>
