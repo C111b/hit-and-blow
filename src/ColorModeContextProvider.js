@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // const ColorModeUpdateContext = React.createContext();
 export const ColorModeContext = React.createContext({
   toggleColorMode: () => {},
-  mode: "light",
+  mode: "dark",
 });
 
 //create theme palette
@@ -65,7 +65,7 @@ const getDesignTokens = (mode) => ({
 // }
 
 const ColorModeContextProvider = ({ children }) => {
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState('dark');
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode])
   const colorMode = React.useMemo(
     () => ({

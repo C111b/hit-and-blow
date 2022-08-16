@@ -10,9 +10,9 @@
     justify-content: flex-start;
 } */
 
-/* :root {
-    background-color: black;
-} */
+:root {
+    font-size: 24px;
+}
 
 
 .box {
@@ -192,9 +192,9 @@ button {
     border-radius: 50%;
     border-color: black;
     border-style: double;
-    width: .75rem;
-    height: .75rem;
-    padding: .75rem;
+    width: .8rem;
+    height: .8rem;
+    padding: .85rem;
     font-size: 0;
     background-color: hsla(0, 0%, 0%, 0.452);
 }

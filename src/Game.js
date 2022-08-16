@@ -27,7 +27,7 @@ import { ColorModeContext } from "./ColorModeContextProvider.js";
 //icons
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 import "./App.css";
 
@@ -386,61 +386,92 @@ const Game = () => {
   // for opening help dialog
   const handleHelp = () => {
     return help ? setHelp(false) : setHelp(true);
-  }
+  };
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-          <Toolbar>
-          <Typography color="inherit" component="div">
-            Hit and Blow
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton 
-          color="secondary"
-          onClick={handleHelp}
+          <Toolbar
+            sx={{
+              // display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            <HelpOutlineIcon />
-          </IconButton>
-          <Dialog 
-            open={help}
-            onClose={handleHelp}
-          >
-            <DialogTitle sx={{textAlign: "center"}}>How To Play</DialogTitle>
-            <DialogContent>
-              <DialogContentText sx={{
-                color: "text.primary",
-                textAlign: "center"}}>Guess the correct sequence of colors.
-                <Divider sx={{m:2}}></Divider> 
-                </DialogContentText>
-            <u>Information</u> <br />
-              Hits are indicated via red pin:  <br />
-              <span className="small-circle hit"></span> This occurs when the position of a colour matches the sequence. <br /> <br />
-              Blows are indicated via white pin: <br />
-              <span className="small-circle blow"></span> This occurs when a colour matches the sequence. <br /> <br />
-              The goal is to accumulate 4 Hits. <br />
-                <Box sx={{display: 'flex',
-                          flexWrap: 'wrap',
-                          maxWidth: 60,
-              }}>
-                  <span className="small-circle hit"></span>  <span className="small-circle hit"></span>
-                  <span className="small-circle hit"></span>  <span className="small-circle hit"></span>
-                </Box>
-            </DialogContent>
-          </Dialog>
-          <IconButton
-            sx={{ justifyContent: "flex-end", mr: 1 }}
-            color="secondary"
-            edge="end"
-            onClick={colorMode.toggleColorMode}
-          >
-            {theme.palette.mode === "dark" ? (
-              <Brightness7Icon />
-            ) : (
-              <Brightness4Icon />
-            )}
-          </IconButton>
+            {/* <Box sx={{ flexGrow: .05 }} /> */}
+
+            <Typography
+              color="inherit"
+              component="div"
+              // sx={{ flexGrow: 1, textAlign: "center" }}
+            >
+              Hit and Blow
+            </Typography>
+
+            <div>
+              <IconButton color="secondary" onClick={handleHelp}>
+                <HelpOutlineIcon />
+              </IconButton>
+              <Dialog
+                fullWidth={true}
+                maxWidth={"sm"}
+                open={help}
+                onClose={handleHelp}
+              >
+                <DialogTitle sx={{ textAlign: "center" }}>
+                  How To Play
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText
+                    sx={{
+                      color: "text.primary",
+                      textAlign: "center",
+                    }}
+                  >
+                    Guess the correct sequence of colors.
+                    <Divider sx={{ m: 2 }}></Divider>
+                  </DialogContentText>
+                  <DialogContentText
+                    sx={{
+                      color: "text.primary",
+                      fontSize: 18.5,
+                      // ml: 5
+                    }}
+                  >
+                    <u>Information</u> <br />
+                    <div>
+                      Hits are indicated via red pin: <br />
+                      <span className="small-circle hit"></span> Occurs when the
+                      position of a color matches the sequence. <br /> <br />
+                    </div>
+                    <div>
+                      Blows are indicated via white pin: <br />
+                      <span className="small-circle blow"></span> Occurs when a
+                      color matches the sequence. <br /> <br />
+                    </div>
+                    A correct sequence results in all Hits. <br />
+                    <div className="box">
+                      <div className="small-circle hit"></div>
+                      <div className="small-circle hit"></div>
+                      <div className="small-circle hit"></div>
+                      <div className="small-circle hit"></div>
+                    </div>
+                  </DialogContentText>
+                </DialogContent>
+              </Dialog>
+              <IconButton
+                sx={{ justifyContent: "flex-end", mr: 1 }}
+                color="secondary"
+                edge="end"
+                onClick={colorMode.toggleColorMode}
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
+              </IconButton>
+            </div>
           </Toolbar>
         </AppBar>
       </Box>
@@ -475,8 +506,7 @@ const Game = () => {
                 <Grid container spacing={2} alignItems="start">
                   <Grid item xs>
                     <Slider
-                  color="secondary"
-
+                      color="secondary"
                       value={typeof ncolors === "number" ? ncolors : 0}
                       onChange={handleSliderColors}
                       aria-labelledby="colors-slider"
@@ -509,8 +539,7 @@ const Game = () => {
                 <Grid container spacing={2} alignItems="start">
                   <Grid item xs>
                     <Slider
-                  color="secondary"
-
+                      color="secondary"
                       value={typeof turnstolose === "number" ? turnstolose : 0}
                       onChange={handleSliderTTL}
                       aria-labelledby="turns-slider"
@@ -543,8 +572,7 @@ const Game = () => {
                 <Grid container spacing={2} alignItems="start">
                   <Grid item xs>
                     <Slider
-                  color="secondary"
-
+                      color="secondary"
                       value={slots}
                       aria-labelledby="slots-slider"
                       defaultValue={4}
@@ -702,7 +730,7 @@ const Game = () => {
             <div className="footer-content">
               <div className="color-buttons">{generateButtons()}</div>
               <Button
-                sx={{ width: 100 }}
+                sx={{ width: 150 }}
                 size="large"
                 color="secondary"
                 className="submit"
