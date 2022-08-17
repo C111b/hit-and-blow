@@ -159,6 +159,7 @@ const empty = (userseq, i) => {
 };
 
 //function that replaces an empty "" button with a "clicked" button
+// *new , make it so that if there is already a prior "clicked", delete it
 const clicked = (userseq, i) => {
   //splice the index, 1 item, ""
   let temp = [...userseq];
@@ -278,6 +279,8 @@ const Game = () => {
       : setSeq(nonDupeSeq(colors, slots));
   }, [newgame, colors, slots, hasdupe, turnstolose]);
 
+
+
   //for MUI sliders
   useEffect(() => {
     setColors(generateColor(ncolors));
@@ -308,6 +311,33 @@ const Game = () => {
     return buttons;
   };
 
+  //handle user buttons
+  // const handleUserButtonClick = (userseq, i) => {
+  //   console.log(userseq);
+  //   if (userseq[i] === "" && userseq.includes("clicked")) {
+  //     let temp = empty(userseq, userseq.indexOf("clicked"));
+  //     return setUserSeq(clicked(temp, i));
+  //   } else if (userseq[i] === "") {
+  //     return  setUserSeq(clicked(userseq, i));
+  //   } else {
+  //     return setUserSeq(empty(userseq, i));
+  //   }
+  // }
+
+  // //temp hacked function, as above is not working
+  // const emptyAndClick = (userseq, i) => {
+  //   return [setUserSeq(empty(userseq, userseq.indexOf("clicked"))), setUserSeq(clicked(userseq, i))]
+  // }
+
+  // const handleUserButtonsClick = (userseq, i) => {
+  //   return userseq[i] === "" && !userseq.includes("clicked") //and there is no "clicked" in userseq list
+  //   ? setUserSeq(clicked(userseq, i))
+  //   : userseq[i] === ""
+  //   ? setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i)) 
+  //   : setUserSeq(empty(userseq, i));
+  // }
+  //ERROW USERSEQ IS NOT ITERABLE
+
   //sets user buttons
   const userButtons = () => {
     let buttons = [];
@@ -322,8 +352,10 @@ const Game = () => {
               : userseq[i] + " circle"
           }
           onClick={() =>
-            userseq[i] === ""
+            userseq[i] === "" && !userseq.includes("clicked") //and there is no "clicked" in userseq list
               ? setUserSeq(clicked(userseq, i))
+              : userseq[i] === ""
+              ? setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i)) 
               : setUserSeq(empty(userseq, i))
           }
           key={i}
@@ -401,7 +433,7 @@ const Game = () => {
             {/* <Box sx={{ flexGrow: .05 }} /> */}
 
             <Typography
-              color="inherit"
+              color="text.primary"
               component="div"
               // sx={{ flexGrow: 1, textAlign: "center" }}
             >
@@ -519,7 +551,7 @@ const Game = () => {
                   </Grid>
                   <Grid item>
                     <Input
-                      sx={{ width: 40 }}
+                      sx={{ width: 45 }}
                       value={ncolors}
                       size="small"
                       onChange={handleInputColors}
@@ -552,7 +584,7 @@ const Game = () => {
                   </Grid>
                   <Grid item>
                     <Input
-                      sx={{ width: 40 }}
+                      sx={{ width: 45 }}
                       value={turnstolose}
                       size="small"
                       onChange={handleInputTTL}
@@ -585,7 +617,7 @@ const Game = () => {
                   </Grid>
                   <Grid item>
                     <Input
-                      sx={{ width: 40 }}
+                      sx={{ width: 45 }}
                       value={slots}
                       size="small"
                       onChange={handleInputSlots}
