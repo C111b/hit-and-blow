@@ -279,8 +279,6 @@ const Game = () => {
       : setSeq(nonDupeSeq(colors, slots));
   }, [newgame, colors, slots, hasdupe, turnstolose]);
 
-
-
   //for MUI sliders
   useEffect(() => {
     setColors(generateColor(ncolors));
