@@ -311,32 +311,14 @@ const Game = () => {
     return buttons;
   };
 
-  //handle user buttons
-  // const handleUserButtonClick = (userseq, i) => {
-  //   console.log(userseq);
-  //   if (userseq[i] === "" && userseq.includes("clicked")) {
-  //     let temp = empty(userseq, userseq.indexOf("clicked"));
-  //     return setUserSeq(clicked(temp, i));
-  //   } else if (userseq[i] === "") {
-  //     return  setUserSeq(clicked(userseq, i));
-  //   } else {
-  //     return setUserSeq(empty(userseq, i));
-  //   }
-  // }
 
-  // //temp hacked function, as above is not working
-  // const emptyAndClick = (userseq, i) => {
-  //   return [setUserSeq(empty(userseq, userseq.indexOf("clicked"))), setUserSeq(clicked(userseq, i))]
-  // }
-
-  // const handleUserButtonsClick = (userseq, i) => {
-  //   return userseq[i] === "" && !userseq.includes("clicked") //and there is no "clicked" in userseq list
-  //   ? setUserSeq(clicked(userseq, i))
-  //   : userseq[i] === ""
-  //   ? setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i)) 
-  //   : setUserSeq(empty(userseq, i));
-  // }
-  //ERROW USERSEQ IS NOT ITERABLE
+  const handleUserButtonsClick = (userseq, i) => {
+    if (userseq[i] === "" && !userseq.includes("clicked")) {
+      return setUserSeq(clicked(userseq,i));
+    } else if (userseq[i] === "") {
+      return setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i));
+    } else {return setUserSeq(empty(userseq, i));}
+  }
 
   //sets user buttons
   const userButtons = () => {
@@ -351,13 +333,14 @@ const Game = () => {
               ? "clicked circle"
               : userseq[i] + " circle"
           }
-          onClick={() =>
-            userseq[i] === "" && !userseq.includes("clicked") //and there is no "clicked" in userseq list
-              ? setUserSeq(clicked(userseq, i))
-              : userseq[i] === ""
-              ? setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i)) 
-              : setUserSeq(empty(userseq, i))
-          }
+          onClick={() => handleUserButtonsClick(userseq,i)}
+          // onClick={() =>
+          //   userseq[i] === "" && !userseq.includes("clicked") //and there is no "clicked" in userseq list
+          //     ? setUserSeq(clicked(userseq, i))
+          //     : userseq[i] === ""
+          //     ? setUserSeq(clicked(empty(userseq, userseq.indexOf("clicked")), i)) 
+          //     : setUserSeq(empty(userseq, i))
+          // }
           key={i}
         >
           {userseq[i] === ""
