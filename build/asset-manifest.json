@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/hit-and-blow/static/css/main.042096ba.css",
+    "main.js": "/hit-and-blow/static/js/main.38dc64dd.js",
+    "static/js/787.683da0cc.chunk.js": "/hit-and-blow/static/js/787.683da0cc.chunk.js",
+    "index.html": "/hit-and-blow/index.html",
+    "main.042096ba.css.map": "/hit-and-blow/static/css/main.042096ba.css.map",
+    "main.38dc64dd.js.map": "/hit-and-blow/static/js/main.38dc64dd.js.map",
+    "787.683da0cc.chunk.js.map": "/hit-and-blow/static/js/787.683da0cc.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.042096ba.css",
+    "static/js/main.38dc64dd.js"
+  ]
+}
